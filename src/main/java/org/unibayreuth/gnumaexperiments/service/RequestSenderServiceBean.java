@@ -2,6 +2,7 @@ package org.unibayreuth.gnumaexperiments.service;
 
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,7 +13,7 @@ import java.net.http.HttpResponse;
 /**
  * Request sending service
  */
-@Component
+@Service
 public class RequestSenderServiceBean implements RequestSenderService {
 
     /**
