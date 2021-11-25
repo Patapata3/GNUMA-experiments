@@ -1,15 +1,15 @@
 package org.unibayreuth.gnumaexperiments.commands;
 
-import java.util.Date;
+import java.util.UUID;
 
 public class CreateExperimentCommand {
-    private Date date;
+    private UUID classifierId;
 
-    public CreateExperimentCommand(Date date) {
-        this.date = date;
+    public CreateExperimentCommand(UUID classifierId) {
+        this.classifierId = classifierId;
     }
 
-    public Date getDate() {
-        return date;
+    public UUID getClassifierId() {
+        return classifierId;
     }
 }

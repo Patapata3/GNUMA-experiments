@@ -1,23 +1,25 @@
 package org.unibayreuth.gnumaexperiments.events;
 
+import org.unibayreuth.gnumaexperiments.dto.Classifier;
+
 import java.util.Date;
 import java.util.UUID;
 
 public class CreatedExperimentEvent {
     private final UUID id;
-    private Date date;
+    private UUID classifierId;
 
-    public CreatedExperimentEvent(UUID id, Date date) {
+    public CreatedExperimentEvent(UUID id, UUID classifierId) {
         this.id = id;
-        this.date = date;
+        this.classifierId = classifierId;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public Date getDate() {
-        return date;
+    public UUID getClassifierId() {
+        return classifierId;
     }
 
     @Override
