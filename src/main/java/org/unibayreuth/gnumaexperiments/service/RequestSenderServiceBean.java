@@ -1,7 +1,7 @@
 package org.unibayreuth.gnumaexperiments.service;
 
 import com.google.common.base.Preconditions;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,21 +13,9 @@ import java.net.http.HttpResponse;
 /**
  * Request sending service
  */
-@Service
+@Service("senderService")
+@Primary
 public class RequestSenderServiceBean implements RequestSenderService {
-
-    /**
-     * Send a get request with a default header
-     * @param uri - address of a resource being requested
-     * @return - response from the resource
-     * @throws IOException - malformed or incorrect uri
-     * @throws InterruptedException - connection to the resource was interrupted
-     */
-    @Override
-    public HttpResponse<String> sendGetRequest(String uri) throws IOException, InterruptedException {
-        Preconditions.checkNotNull(uri, "URI cannot be null");
-        return sendGetRequest(uri, "content-type", "application/json");
-    }
 
     /**
      * Send a get request
@@ -41,14 +29,16 @@ public class RequestSenderServiceBean implements RequestSenderService {
     public HttpResponse<String> sendGetRequest(String uri, String... headers) throws IOException, InterruptedException {
         Preconditions.checkNotNull(uri, "URI cannot be null");
         Preconditions.checkNotNull(headers, "headers list cannot be null");
-        Preconditions.checkArgument(headers.length != 0, "Headers list cannot be empty");
         Preconditions.checkArgument(headers.length % 2 == 0,
                 "Headers list should contain even number of entries");
 
-        HttpRequest request = HttpRequest.newBuilder(URI.create(uri))
-                .GET()
-                .headers(headers)
-                .build();
+
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(uri))
+                .GET();
+        if (headers.length > 0) {
+            requestBuilder.headers(headers);
+        }
+        HttpRequest request = requestBuilder.build();
 
         HttpClient httpClient = HttpClient.newHttpClient();
         return httpClient.send(request, HttpResponse.BodyHandlers.ofString());

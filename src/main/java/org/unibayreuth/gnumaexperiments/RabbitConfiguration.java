@@ -2,7 +2,6 @@ package org.unibayreuth.gnumaexperiments;
 
 import com.mongodb.client.MongoClient;
 import com.rabbitmq.client.Channel;
-import org.axonframework.eventhandling.EventMessage;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -12,6 +11,7 @@ import org.axonframework.extensions.amqp.eventhandling.spring.SpringAMQPMessageS
 import org.axonframework.extensions.mongo.DefaultMongoTemplate;
 import org.axonframework.extensions.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
 import org.axonframework.spring.config.AxonConfiguration;
+import org.json.JSONObject;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,21 +29,34 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public Queue queue() {
-        return QueueBuilder.nonDurable("expQueue").build();
+    public Queue queue1() {
+        return QueueBuilder.nonDurable("exp.queue").build();
     }
 
     @Bean
-    public Binding binding() {
-        return BindingBuilder.bind(queue()).to(exchange()).with("experiments").noargs();
+    public Queue queue2() {
+        return QueueBuilder.nonDurable("exp.queue2").build();
+    }
+
+
+    @Bean
+    public Binding binding1() {
+        return BindingBuilder.bind(queue1()).to(exchange()).with("Classifier.*").noargs();
+    }
+
+    @Bean
+    public Binding binding2() {
+        return BindingBuilder.bind(queue2()).to(exchange()).with("experiments2").noargs();
     }
 
     @Bean
     public SpringAMQPMessageSource myMessageSource(AMQPMessageConverter messageConverter) {
         return new SpringAMQPMessageSource(messageConverter) {
-            @RabbitListener(queues = "expQueue")
+
+            @RabbitListener(queues = "exp.queue2")
             @Override
             public void onMessage(Message message, Channel channel) {
+                JSONObject messageBody = new JSONObject(new String(message.getBody()));
                 super.onMessage(message, channel);
             }
         };
@@ -53,7 +66,7 @@ public class RabbitConfiguration {
     public EmbeddedEventStore eventStore(EventStorageEngine storageEngine, AxonConfiguration configuration) {
         return EmbeddedEventStore.builder()
                 .storageEngine(storageEngine)
-                .messageMonitor(configuration.messageMonitor(EventStore.class, "eventStore"))
+                .messageMonitor(configuration.messageMonitor(EventStore.class, "experimentEventStore"))
                 .build();
     }
 
