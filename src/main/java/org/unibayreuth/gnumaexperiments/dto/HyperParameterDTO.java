@@ -1,15 +1,17 @@
 package org.unibayreuth.gnumaexperiments.dto;
 
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.HyperParameterType;
+
 import java.util.List;
 
 public class HyperParameterDTO {
     private String key;
-    private String type;
+    private HyperParameterType type;
     private boolean optional;
     private String defaultValue;
     private List<String> valueList;
 
-    public HyperParameterDTO(String key, String type, boolean optional, String defaultValue, List<String> valueList) {
+    public HyperParameterDTO(String key, HyperParameterType type, boolean optional, String defaultValue, List<String> valueList) {
         this.key = key;
         this.type = type;
         this.optional = optional;
@@ -21,7 +23,7 @@ public class HyperParameterDTO {
         return key;
     }
 
-    public String getType() {
+    public HyperParameterType getType() {
         return type;
     }
 

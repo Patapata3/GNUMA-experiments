@@ -1,19 +1,23 @@
 package org.unibayreuth.gnumaexperiments.service;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
+import com.google.gson.Gson;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Objects;
 
 /**
  * Request sending service
  */
-@Service("senderService")
+@Service(RequestSenderService.NAME)
 @Primary
 public class RequestSenderServiceBean implements RequestSenderService {
 
@@ -43,4 +47,24 @@ public class RequestSenderServiceBean implements RequestSenderService {
         HttpClient httpClient = HttpClient.newHttpClient();
         return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     }
+
+    @Override
+    public HttpResponse<String> sendPostRequest(String uri, @Nullable String body, String... headers) throws IOException, InterruptedException {
+        Preconditions.checkNotNull(uri, "URI cannot be null");
+        Preconditions.checkNotNull(headers, "headers list cannot be null");
+        Preconditions.checkArgument(headers.length % 2 == 0,
+                "Headers list should contain even number of entries");
+
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(uri))
+                .POST(Strings.isNullOrEmpty(body) ? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(body));
+        if (headers.length > 0) {
+            requestBuilder.headers(headers);
+        }
+        HttpRequest request = requestBuilder.build();
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+        return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+
 }

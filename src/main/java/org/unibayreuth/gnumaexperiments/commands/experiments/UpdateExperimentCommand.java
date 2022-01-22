@@ -1,6 +1,7 @@
 package org.unibayreuth.gnumaexperiments.commands.experiments;
 
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
 
 import java.util.Map;
 import java.util.Objects;
@@ -9,10 +10,10 @@ import java.util.UUID;
 public class UpdateExperimentCommand {
     @TargetAggregateIdentifier
     private UUID id;
-    private String status;
+    private ExperimentStatus status;
     private Map<String, Double> newResults;
 
-    public UpdateExperimentCommand(UUID id, String status, Map<String, Double> newResults) {
+    public UpdateExperimentCommand(UUID id, ExperimentStatus status, Map<String, Double> newResults) {
         this.id = id;
         this.status = status;
         this.newResults = newResults;
@@ -22,7 +23,7 @@ public class UpdateExperimentCommand {
         return id;
     }
 
-    public String getStatus() {
+    public ExperimentStatus getStatus() {
         return status;
     }
 

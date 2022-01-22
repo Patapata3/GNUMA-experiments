@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/classifiers")
+@RequestMapping(value = "/classifier")
 public class ClassifierCommandController {
 
     private final CommandGateway commandGateway;

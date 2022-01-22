@@ -1,6 +1,7 @@
 package org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity;
 
 import org.axonframework.modelling.command.EntityId;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.HyperParameterType;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,10 +15,10 @@ public class HyperParameter {
     private String defaultValue;
     private List<String> valueList;
 
-    public HyperParameter(String key, String type, boolean optional, String defaultValue, List<String> valueList) {
+    public HyperParameter(String key, HyperParameterType type, boolean optional, String defaultValue, List<String> valueList) {
         this.id = UUID.randomUUID();
         this.key = key;
-        this.type = type;
+        this.type = type.getId();
         this.optional = optional;
         this.defaultValue = defaultValue;
         this.valueList = valueList;
@@ -31,8 +32,9 @@ public class HyperParameter {
         return key;
     }
 
-    public String getType() {
-        return type;
+    public HyperParameterType getType() {
+        return type == null ? null :
+                HyperParameterType.valueOf(type);
     }
 
     public boolean isOptional() {

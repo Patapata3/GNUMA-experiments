@@ -10,7 +10,7 @@ import java.net.http.HttpResponse;
 /**
  * Service, responsible for sending requests, responses of which are stored in cache
  */
-@Service("cachedSenderService")
+@Service("gnuma_CachedSenderService")
 public class CachedRequestSenderServiceBean extends RequestSenderServiceBean {
     private final RequestCache requestCache;
 

@@ -1,11 +1,13 @@
 package org.unibayreuth.gnumaexperiments.querymodel.projectors;
 
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.unibayreuth.gnumaexperiments.GNUMAConstants;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
 import org.unibayreuth.gnumaexperiments.events.experiments.CreatedExperimentEvent;
 import org.unibayreuth.gnumaexperiments.events.experiments.DeletedExperimentEvent;
 import org.unibayreuth.gnumaexperiments.events.experiments.StopExperimentEvent;
@@ -22,6 +24,8 @@ import java.util.*;
 public class ExperimentProjector {
     @Autowired
     private ExperimentViewRepository experimentViewRepository;
+    @Autowired
+    private CommandGateway commandGateway;
 
     @EventHandler
     public void handle(CreatedExperimentEvent event) {
@@ -37,7 +41,7 @@ public class ExperimentProjector {
     @EventHandler
     public void handle(StopExperimentEvent event) {
         experimentViewRepository.findById(event.getId()).ifPresent(experimentView -> {
-            experimentView.setStatus(GNUMAConstants.STOP_STATUS);
+            experimentView.setStatus(ExperimentStatus.STOP);
             experimentViewRepository.save(experimentView);
         });
     }

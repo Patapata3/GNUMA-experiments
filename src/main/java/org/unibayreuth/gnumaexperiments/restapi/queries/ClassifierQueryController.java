@@ -2,6 +2,8 @@ package org.unibayreuth.gnumaexperiments.restapi.queries;
 
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.unibayreuth.gnumaexperiments.queries.classifiers.RetrieveAddressClassifiersQuery;
 import org.unibayreuth.gnumaexperiments.queries.classifiers.RetrieveAllClassifiersQuery;
@@ -14,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.*;
 
 @RestController
-@RequestMapping("/classifiers")
+@RequestMapping("/classifier")
 public class ClassifierQueryController {
 
     private final QueryGateway queryGateway;
@@ -32,8 +34,9 @@ public class ClassifierQueryController {
 
     @CrossOrigin
     @GetMapping("/{id}")
-    public CompletableFuture<ClassifierView> getClassifierById(@PathVariable String id) {
-        return queryGateway.query(new RetrieveIdClassifierQuery(id), instanceOf(ClassifierView.class));
+    public CompletableFuture<ResponseEntity<ClassifierView>> getClassifierById(@PathVariable String id) {
+        return queryGateway.query(new RetrieveIdClassifierQuery(id), instanceOf(ClassifierView.class))
+                .thenApply(it -> it != null ? ResponseEntity.ok(it) : ResponseEntity.notFound().build());
     }
 
     @CrossOrigin

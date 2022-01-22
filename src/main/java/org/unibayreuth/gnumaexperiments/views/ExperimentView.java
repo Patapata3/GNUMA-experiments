@@ -3,6 +3,7 @@ package org.unibayreuth.gnumaexperiments.views;
 import org.springframework.data.annotation.Id;
 import org.unibayreuth.gnumaexperiments.GNUMAConstants;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -18,10 +19,10 @@ public class ExperimentView {
     public ExperimentView() {
     }
 
-    public ExperimentView(UUID id, Date date, String status, ExperimentClassifier classifier) {
+    public ExperimentView(UUID id, Date date, ExperimentStatus status, ExperimentClassifier classifier) {
         this.id = id;
         this.date = date;
-        this.status = status;
+        this.status = status.getId();
         this.classifier = classifier;
     }
 
@@ -57,12 +58,13 @@ public class ExperimentView {
         this.results = results;
     }
 
-    public String getStatus() {
-        return status;
+    public ExperimentStatus getStatus() {
+        return status == null ? null :
+                ExperimentStatus.valueOf(status);
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(ExperimentStatus status) {
+        this.status = status.getId();
     }
 
     @Override
