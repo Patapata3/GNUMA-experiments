@@ -7,33 +7,32 @@ import org.unibayreuth.gnumaexperiments.commands.classifiers.CreateClassifierCom
 import org.unibayreuth.gnumaexperiments.commands.classifiers.DeleteClassifierCommand;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParameter;
 import org.unibayreuth.gnumaexperiments.dto.ClassifierDTO;
-import org.unibayreuth.gnumaexperiments.dto.HyperParameterDTO;
+import org.unibayreuth.gnumaexperiments.service.DTOConverterService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/classifier")
 public class ClassifierCommandController {
 
     private final CommandGateway commandGateway;
+    private final DTOConverterService dtoConverterService;
 
     @Autowired
-    public ClassifierCommandController(CommandGateway commandGateway) {
+    public ClassifierCommandController(CommandGateway commandGateway, DTOConverterService dtoConverterService) {
         this.commandGateway = commandGateway;
+        this.dtoConverterService = dtoConverterService;
     }
 
     @CrossOrigin
     @PostMapping
     public CompletableFuture<String> createClassifier(@RequestBody ClassifierDTO newClassifier) {
         List<HyperParameter> hyperParameters = Objects.isNull(newClassifier) ? new ArrayList<>() :
-                newClassifier.getHyperParameters()
-                        .stream()
-                        .map(this::createHyperParameterFromDTO)
-                        .collect(Collectors.toList());
+                dtoConverterService.createHyperParametersFromDTO(newClassifier.getHyperParameters());
+
         return commandGateway.send(new CreateClassifierCommand(newClassifier.getId(), newClassifier.getAddress(), hyperParameters));
     }
 
@@ -41,10 +40,5 @@ public class ClassifierCommandController {
     @DeleteMapping("/{id}")
     public CompletableFuture<String> deleteClassifier(@PathVariable String id) {
         return commandGateway.send(new DeleteClassifierCommand(id));
-    }
-
-    private HyperParameter createHyperParameterFromDTO(HyperParameterDTO hyperParameterDTO) {
-        return new HyperParameter(hyperParameterDTO.getKey(), hyperParameterDTO.getType(), hyperParameterDTO.isOptional(),
-                hyperParameterDTO.getDefaultValue(), hyperParameterDTO.getValueList());
     }
 }

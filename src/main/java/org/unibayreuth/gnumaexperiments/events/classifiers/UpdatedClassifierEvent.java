@@ -4,12 +4,12 @@ import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParamete
 
 import java.util.List;
 
-public class CreatedClassifierEvent {
+public class UpdatedClassifierEvent {
     private final String id;
     private String address;
     private List<HyperParameter> hyperParameters;
 
-    public CreatedClassifierEvent(String id, String address, List<HyperParameter> hyperParameters) {
+    public UpdatedClassifierEvent(String id, String address, List<HyperParameter> hyperParameters) {
         this.id = id;
         this.address = address;
         this.hyperParameters = hyperParameters;
@@ -29,6 +29,8 @@ public class CreatedClassifierEvent {
 
     @Override
     public String toString() {
-        return String.format("CreatedClassifierEvent{id=%s}", id);
+        return "UpdatedClassifierEvent{" +
+                "id='" + id + '\'' +
+                '}';
     }
 }

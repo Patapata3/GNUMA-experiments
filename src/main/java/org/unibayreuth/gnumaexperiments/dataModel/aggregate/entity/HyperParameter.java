@@ -15,6 +15,8 @@ public class HyperParameter {
     private String defaultValue;
     private List<String> valueList;
 
+    public HyperParameter() {}
+
     public HyperParameter(String key, HyperParameterType type, boolean optional, String defaultValue, List<String> valueList) {
         this.id = UUID.randomUUID();
         this.key = key;

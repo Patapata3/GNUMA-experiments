@@ -3,6 +3,7 @@ package org.unibayreuth.gnumaexperiments.service;
 import org.springframework.stereotype.Service;
 import org.unibayreuth.gnumaexperiments.cache.RequestCache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.unibayreuth.gnumaexperiments.exceptions.ServiceRequestException;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
@@ -28,7 +29,7 @@ public class CachedRequestSenderServiceBean extends RequestSenderServiceBean {
      * @throws InterruptedException - connection to the resource was interrupted
      */
     @Override
-    public HttpResponse<String> sendGetRequest(String uri, String... headers) throws IOException, InterruptedException {
+    public HttpResponse<String> sendGetRequest(String uri, String... headers) throws IOException, InterruptedException, ServiceRequestException {
         if (requestCache.contains(uri)) {
             return requestCache.get(uri);
         }

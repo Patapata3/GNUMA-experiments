@@ -3,6 +3,7 @@ package org.unibayreuth.gnumaexperiments.dataModel.aggregate;
 import org.axonframework.modelling.command.AggregateMember;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.CreateClassifierCommand;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.DeleteClassifierCommand;
+import org.unibayreuth.gnumaexperiments.commands.classifiers.UpdateClassifierCommand;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParameter;
 import org.unibayreuth.gnumaexperiments.events.classifiers.CreatedClassifierEvent;
 import org.axonframework.commandhandling.CommandHandler;
@@ -11,6 +12,7 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.unibayreuth.gnumaexperiments.events.classifiers.DeletedClassifierEvent;
+import org.unibayreuth.gnumaexperiments.events.classifiers.UpdatedClassifierEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,11 @@ public class Classifier {
         AggregateLifecycle.apply(new DeletedClassifierEvent(cmd.getId()));
     }
 
+    @CommandHandler
+    public void handle(UpdateClassifierCommand cmd)  {
+        AggregateLifecycle.apply(new UpdatedClassifierEvent(cmd.getId(), cmd.getAddress(), cmd.getHyperParameters()));
+    }
+
     @EventSourcingHandler
     public void handle(CreatedClassifierEvent event) {
         id = event.getId();
@@ -48,5 +55,11 @@ public class Classifier {
     @EventSourcingHandler
     public void handle(DeletedClassifierEvent event) {
         markDeleted();
+    }
+
+    @EventSourcingHandler
+    public void handle(UpdatedClassifierEvent event) {
+        address = event.getAddress();
+        hyperParameters = event.getHyperParameters();
     }
 }

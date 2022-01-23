@@ -1,10 +1,8 @@
 package org.unibayreuth.gnumaexperiments.dataModel.aggregate;
 
 import org.axonframework.modelling.command.AggregateMember;
-import org.unibayreuth.gnumaexperiments.GNUMAConstants;
 import org.unibayreuth.gnumaexperiments.commands.experiments.CreateExperimentCommand;
 import org.unibayreuth.gnumaexperiments.commands.experiments.DeleteExperimentCommand;
-import org.unibayreuth.gnumaexperiments.commands.experiments.StopExperimentCommand;
 import org.unibayreuth.gnumaexperiments.commands.experiments.UpdateExperimentCommand;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.events.experiments.CreatedExperimentEvent;
@@ -14,7 +12,6 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.unibayreuth.gnumaexperiments.events.experiments.DeletedExperimentEvent;
-import org.unibayreuth.gnumaexperiments.events.experiments.StopExperimentEvent;
 import org.unibayreuth.gnumaexperiments.events.experiments.UpdatedExperimentEvent;
 
 import java.util.*;
@@ -45,11 +42,6 @@ public class Experiment {
     }
 
     @CommandHandler
-    public void handle(StopExperimentCommand cmd) {
-        AggregateLifecycle.apply(new StopExperimentEvent(cmd.getId()));
-    }
-
-    @CommandHandler
     public void handle(UpdateExperimentCommand cmd) {
         AggregateLifecycle.apply(new UpdatedExperimentEvent(cmd.getId(), cmd.getStatus(), cmd.getNewResults()));
     }
@@ -68,11 +60,6 @@ public class Experiment {
     @EventSourcingHandler
     public void handle(DeletedExperimentEvent event) {
         AggregateLifecycle.markDeleted();
-    }
-
-    @EventSourcingHandler
-    public void handle(StopExperimentEvent event) {
-        status = GNUMAConstants.STOP_STATUS;
     }
 
     @EventSourcingHandler

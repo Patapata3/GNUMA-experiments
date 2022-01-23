@@ -6,11 +6,8 @@ import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
-import org.unibayreuth.gnumaexperiments.GNUMAConstants;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
 import org.unibayreuth.gnumaexperiments.events.experiments.CreatedExperimentEvent;
 import org.unibayreuth.gnumaexperiments.events.experiments.DeletedExperimentEvent;
-import org.unibayreuth.gnumaexperiments.events.experiments.StopExperimentEvent;
 import org.unibayreuth.gnumaexperiments.events.experiments.UpdatedExperimentEvent;
 import org.unibayreuth.gnumaexperiments.queries.experiments.RetrieveAllExperimentsQuery;
 import org.unibayreuth.gnumaexperiments.queries.experiments.RetrieveClassifierModelExperimentQuery;
@@ -29,7 +26,7 @@ public class ExperimentProjector {
 
     @EventHandler
     public void handle(CreatedExperimentEvent event) {
-        ExperimentView view = new ExperimentView(event.getId(), event.getDate(), event.getStatus(), event.getClassifier());
+        ExperimentView view = new ExperimentView(event.getId(), event.getDate(), event.getStatus(), event.getClassifier(), event.getTrainDatasetId(), event.getTestDatasetId());
         experimentViewRepository.save(view);
     }
 
@@ -39,20 +36,13 @@ public class ExperimentProjector {
     }
 
     @EventHandler
-    public void handle(StopExperimentEvent event) {
-        experimentViewRepository.findById(event.getId()).ifPresent(experimentView -> {
-            experimentView.setStatus(ExperimentStatus.STOP);
-            experimentViewRepository.save(experimentView);
-        });
-    }
-
-    @EventHandler
     public void handle(UpdatedExperimentEvent event) {
         experimentViewRepository.findById(event.getId()).ifPresent(experimentView -> {
             experimentView.setStatus(event.getStatus());
             if (!Objects.isNull(event.getNewResults())) {
                 writeResults(experimentView, event.getNewResults());
             }
+            experimentViewRepository.save(experimentView);
         });
     }
 
@@ -68,7 +58,7 @@ public class ExperimentProjector {
 
     @QueryHandler
     public ExperimentView handle(RetrieveClassifierModelExperimentQuery query) {
-        return experimentViewRepository.findByClassifier_RemoteIdAndClassifier_ModelId(query.getClassifierId(), query.getModelId())
+        return experimentViewRepository.findByClassifier_RemoteIdAndClassifier_Model_RemoteId(query.getClassifierId(), query.getModelId())
                 .orElse(null);
     }
 

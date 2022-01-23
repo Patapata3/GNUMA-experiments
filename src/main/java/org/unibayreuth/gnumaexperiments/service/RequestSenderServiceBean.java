@@ -2,9 +2,13 @@ package org.unibayreuth.gnumaexperiments.service;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.google.gson.Gson;
+import com.google.common.collect.Sets;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.unibayreuth.gnumaexperiments.exceptions.ServiceRequestException;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -12,7 +16,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Objects;
+import java.util.Arrays;
+import java.util.Set;
+
+import static org.unibayreuth.gnumaexperiments.logging.GnumaLogger.*;
 
 /**
  * Request sending service
@@ -20,6 +27,9 @@ import java.util.Objects;
 @Service(RequestSenderService.NAME)
 @Primary
 public class RequestSenderServiceBean implements RequestSenderService {
+    private final Logger log = LoggerFactory.getLogger(RequestSenderServiceBean.class);
+
+    private final Set<Integer> SUCCESS_CODES = Sets.newHashSet(HttpResponseStatus.OK.code(), HttpResponseStatus.ACCEPTED.code());
 
     /**
      * Send a get request
@@ -30,26 +40,21 @@ public class RequestSenderServiceBean implements RequestSenderService {
      * @throws InterruptedException - connection to the resource was interrupted
      */
     @Override
-    public HttpResponse<String> sendGetRequest(String uri, String... headers) throws IOException, InterruptedException {
+    public HttpResponse<String> sendGetRequest(String uri, String... headers) throws IOException, InterruptedException, ServiceRequestException {
+        log(log::info, String.format("Sending GET request to %s with headers:\n%s", uri, Arrays.toString(headers)));
         Preconditions.checkNotNull(uri, "URI cannot be null");
         Preconditions.checkNotNull(headers, "headers list cannot be null");
         Preconditions.checkArgument(headers.length % 2 == 0,
                 "Headers list should contain even number of entries");
 
-
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(uri))
                 .GET();
-        if (headers.length > 0) {
-            requestBuilder.headers(headers);
-        }
-        HttpRequest request = requestBuilder.build();
-
-        HttpClient httpClient = HttpClient.newHttpClient();
-        return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return sendRequestFromBuilder(requestBuilder, headers);
     }
 
     @Override
-    public HttpResponse<String> sendPostRequest(String uri, @Nullable String body, String... headers) throws IOException, InterruptedException {
+    public HttpResponse<String> sendPostRequest(String uri, @Nullable String body, String... headers) throws IOException, InterruptedException, ServiceRequestException {
+        log(log::info, String.format("Sending GET request to %s with headers:\n%s\n and body:\n%s", uri, Arrays.toString(headers), body));
         Preconditions.checkNotNull(uri, "URI cannot be null");
         Preconditions.checkNotNull(headers, "headers list cannot be null");
         Preconditions.checkArgument(headers.length % 2 == 0,
@@ -57,13 +62,23 @@ public class RequestSenderServiceBean implements RequestSenderService {
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(uri))
                 .POST(Strings.isNullOrEmpty(body) ? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(body));
+        return sendRequestFromBuilder(requestBuilder, headers);
+    }
+
+    private HttpResponse<String> sendRequestFromBuilder(HttpRequest.Builder requestBuilder, String... headers) throws IOException, InterruptedException, ServiceRequestException {
         if (headers.length > 0) {
             requestBuilder.headers(headers);
         }
         HttpRequest request = requestBuilder.build();
 
         HttpClient httpClient = HttpClient.newHttpClient();
-        return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if (!SUCCESS_CODES.contains(response.statusCode())) {
+            log(log::error, String.format("Response returned with status: %s", response.statusCode()));
+            throw new ServiceRequestException(response.statusCode(), response.body(), request.uri().toString());
+        }
+        log(log::info, "Request executed successfully");
+        return response;
     }
 
 

@@ -8,5 +8,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ExperimentViewRepository extends MongoRepository<ExperimentView, UUID> {
-    Optional<ExperimentView> findByClassifier_RemoteIdAndClassifier_ModelId(@NonNull String classifierRemoteId, @NonNull UUID modelId);
+    Optional<ExperimentView> findByClassifier_RemoteIdAndClassifier_Model_RemoteId(@NonNull String classifierRemoteId, @NonNull UUID modelId);
 }

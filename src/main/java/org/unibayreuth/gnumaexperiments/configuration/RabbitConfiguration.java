@@ -1,7 +1,9 @@
-package org.unibayreuth.gnumaexperiments;
+package org.unibayreuth.gnumaexperiments.configuration;
 
 import com.mongodb.client.MongoClient;
 import com.rabbitmq.client.Channel;
+import org.axonframework.commandhandling.CommandBus;
+import org.axonframework.commandhandling.SimpleCommandBus;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -17,6 +19,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.unibayreuth.gnumaexperiments.handlers.exceptionhandling.ExceptionWrappingHandlerInterceptor;
 
 @Configuration
 public class RabbitConfiguration {
@@ -38,7 +41,6 @@ public class RabbitConfiguration {
         return QueueBuilder.nonDurable("exp.queue2").build();
     }
 
-
     @Bean
     public Binding binding1() {
         return BindingBuilder.bind(queue1()).to(exchange()).with("Classifier.*").noargs();
@@ -46,7 +48,7 @@ public class RabbitConfiguration {
 
     @Bean
     public Binding binding2() {
-        return BindingBuilder.bind(queue2()).to(exchange()).with("experiments2").noargs();
+        return BindingBuilder.bind(queue2()).to(exchange()).with("experiments").noargs();
     }
 
     @Bean

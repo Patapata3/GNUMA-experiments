@@ -26,4 +26,9 @@ public class StartExperimentCommand {
     public ExperimentClassifierDTO getExperimentClassifierDTO() {
         return experimentClassifierDTO;
     }
+
+    @Override
+    public String toString() {
+        return "StartExperimentCommand{}";
+    }
 }

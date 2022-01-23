@@ -14,16 +14,20 @@ public class ExperimentView {
     private Date date;
     private String status;
     private ExperimentClassifier classifier;
+    private UUID trainDatasetId;
+    private UUID testDatasetId;
     private Map<String, List<Double>> results = new HashMap<>();
 
     public ExperimentView() {
     }
 
-    public ExperimentView(UUID id, Date date, ExperimentStatus status, ExperimentClassifier classifier) {
+    public ExperimentView(UUID id, Date date, ExperimentStatus status, ExperimentClassifier classifier, UUID trainDatasetId, UUID testDatasetId) {
         this.id = id;
         this.date = date;
         this.status = status.getId();
         this.classifier = classifier;
+        this.trainDatasetId = trainDatasetId;
+        this.testDatasetId = testDatasetId;
     }
 
     public UUID getId() {
@@ -65,6 +69,22 @@ public class ExperimentView {
 
     public void setStatus(ExperimentStatus status) {
         this.status = status.getId();
+    }
+
+    public UUID getTrainDatasetId() {
+        return trainDatasetId;
+    }
+
+    public void setTrainDatasetId(UUID trainDatasetId) {
+        this.trainDatasetId = trainDatasetId;
+    }
+
+    public UUID getTestDatasetId() {
+        return testDatasetId;
+    }
+
+    public void setTestDatasetId(UUID testDatasetId) {
+        this.testDatasetId = testDatasetId;
     }
 
     @Override

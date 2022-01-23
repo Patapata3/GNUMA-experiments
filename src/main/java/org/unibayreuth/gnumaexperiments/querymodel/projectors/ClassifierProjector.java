@@ -4,6 +4,7 @@ import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.unibayreuth.gnumaexperiments.events.classifiers.UpdatedClassifierEvent;
 import org.unibayreuth.gnumaexperiments.views.ClassifierView;
 import org.unibayreuth.gnumaexperiments.events.classifiers.CreatedClassifierEvent;
 import org.unibayreuth.gnumaexperiments.events.classifiers.DeletedClassifierEvent;
@@ -29,6 +30,15 @@ public class ClassifierProjector {
     @EventHandler
     public void handle(DeletedClassifierEvent event) {
         classifierViewRepository.deleteById(event.getId());
+    }
+
+    @EventHandler
+    public void handle(UpdatedClassifierEvent event) {
+        classifierViewRepository.findById(event.getId()).ifPresent(classifier -> {
+            classifier.setAddress(event.getAddress());
+            classifier.setHyperParameters(event.getHyperParameters());
+            classifierViewRepository.save(classifier);
+        });
     }
 
     @QueryHandler
