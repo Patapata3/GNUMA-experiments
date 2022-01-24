@@ -10,4 +10,6 @@ public interface RequestSenderService {
     String NAME = "gnuma_RequestSenderService";
     HttpResponse<String> sendGetRequest(String uri, String... headers) throws IOException, InterruptedException, ServiceRequestException;
     HttpResponse<String> sendPostRequest(String uri, String body, String... headers) throws IOException, InterruptedException, ServiceRequestException;
+    HttpResponse<String> sendPutRequest(String uri, String body, String... headers) throws InterruptedException, ServiceRequestException, IOException;
+    HttpResponse<String> sendDeleteRequest(String uri, String... headers) throws InterruptedException, ServiceRequestException, IOException;
 }

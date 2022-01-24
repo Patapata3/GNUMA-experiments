@@ -54,7 +54,7 @@ public class RequestSenderServiceBean implements RequestSenderService {
 
     @Override
     public HttpResponse<String> sendPostRequest(String uri, @Nullable String body, String... headers) throws IOException, InterruptedException, ServiceRequestException {
-        log(log::info, String.format("Sending GET request to %s with headers:\n%s\n and body:\n%s", uri, Arrays.toString(headers), body));
+        log(log::info, String.format("Sending POST request to %s with headers:\n%s\n and body:\n%s", uri, Arrays.toString(headers), body));
         Preconditions.checkNotNull(uri, "URI cannot be null");
         Preconditions.checkNotNull(headers, "headers list cannot be null");
         Preconditions.checkArgument(headers.length % 2 == 0,
@@ -62,6 +62,30 @@ public class RequestSenderServiceBean implements RequestSenderService {
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(uri))
                 .POST(Strings.isNullOrEmpty(body) ? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(body));
+        return sendRequestFromBuilder(requestBuilder, headers);
+    }
+
+    @Override
+    public HttpResponse<String> sendPutRequest(String uri, @Nullable String body, String... headers) throws InterruptedException, ServiceRequestException, IOException {
+        log(log::info, String.format("Sending PUT request to %s with headers:\n%s\n and body:\n%s", uri, Arrays.toString(headers), body));
+        Preconditions.checkNotNull(uri, "URI cannot be null");
+        Preconditions.checkNotNull(headers, "headers list cannot be null");
+        Preconditions.checkArgument(headers.length % 2 == 0,
+                "Headers list should contain even number of entries");
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(uri))
+                .PUT(Strings.isNullOrEmpty(body) ? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(body));
+        return sendRequestFromBuilder(requestBuilder, headers);
+    }
+
+    @Override
+    public HttpResponse<String> sendDeleteRequest(String uri, String... headers) throws InterruptedException, ServiceRequestException, IOException {
+        log(log::info, String.format("Sending DELETE request to %s with headers:\n%s\n", uri, Arrays.toString(headers)));
+        Preconditions.checkNotNull(uri, "URI cannot be null");
+        Preconditions.checkNotNull(headers, "headers list cannot be null");
+        Preconditions.checkArgument(headers.length % 2 == 0,
+                "Headers list should contain even number of entries");
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(uri))
+                .DELETE();
         return sendRequestFromBuilder(requestBuilder, headers);
     }
 
@@ -80,6 +104,4 @@ public class RequestSenderServiceBean implements RequestSenderService {
         log(log::info, "Request executed successfully");
         return response;
     }
-
-
 }

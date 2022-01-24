@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.unibayreuth.gnumaexperiments.logging.GnumaLogger.*;
+import static org.axonframework.messaging.responsetypes.ResponseTypes.*;
 
 @Component
 public class EvaluationFinishedHandler implements MessageHandler {
@@ -45,7 +46,7 @@ public class EvaluationFinishedHandler implements MessageHandler {
         log(log::debug, String.format("Looking for an experiment on classifier {%s} and model {%s}",
                 evalFinishDTO.getClassifierId(), evalFinishDTO.getModelId()));
         ExperimentView runningExperiment = queryGateway.query(new RetrieveClassifierModelExperimentQuery(evalFinishDTO.getClassifierId(),
-                evalFinishDTO.getModelId()), ExperimentView.class).join();
+                evalFinishDTO.getModelId()), instanceOf(ExperimentView.class)).join();
         if (Objects.isNull(runningExperiment)) {
             log(log::error, String.format("Experiment for classifier {%s} model {%s} not found",
                     evalFinishDTO.getClassifierId(), evalFinishDTO.getModelId()));
