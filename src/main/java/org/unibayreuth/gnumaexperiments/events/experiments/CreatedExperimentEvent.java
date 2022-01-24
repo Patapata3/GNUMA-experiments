@@ -53,7 +53,7 @@ public class CreatedExperimentEvent {
     public String toString() {
         SimpleDateFormat format = new SimpleDateFormat(GNUMAConstants.DATE_FORMAT);
         return "CreatedExperimentEvent{" +
-                "id=" + id +
+                "id=" + id.toString() +
                 ", date=" + format.format(date) +
                 '}';
     }

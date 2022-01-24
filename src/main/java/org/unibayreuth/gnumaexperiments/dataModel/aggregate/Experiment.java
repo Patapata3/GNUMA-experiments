@@ -27,6 +27,8 @@ public class Experiment {
     private UUID trainDatasetId;
     private UUID testDatasetId;
     private Map<String, List<Double>> results;
+    private UUID resultSourceId;
+    private String resultSourceType;
 
     public Experiment() {}
 
@@ -43,14 +45,15 @@ public class Experiment {
 
     @CommandHandler
     public void handle(UpdateExperimentCommand cmd) {
-        AggregateLifecycle.apply(new UpdatedExperimentEvent(cmd.getId(), cmd.getStatus(), cmd.getNewResults()));
+        AggregateLifecycle.apply(new UpdatedExperimentEvent(cmd.getId(), cmd.getStatus(), cmd.getNewResults(),
+                cmd.getResultSourceId(), cmd.getResultSourceType()));
     }
 
     @EventSourcingHandler
     public void handle(CreatedExperimentEvent event) {
         id = event.getId();
         date = event.getDate();
-        status = event.getStatus().getId();
+        status = !Objects.isNull(event.getStatus()) ? event.getStatus().getId() : null;
         classifier = event.getClassifier();
         results = new HashMap<>();
         trainDatasetId = event.getTrainDatasetId();
@@ -64,7 +67,9 @@ public class Experiment {
 
     @EventSourcingHandler
     public void handle(UpdatedExperimentEvent event) {
-        status = event.getStatus().getId();
+        status = !Objects.isNull(event.getStatus()) ? event.getStatus().getId() : null;
+        resultSourceId = event.getResultSourceId();
+        resultSourceType = Objects.isNull(event.getResultSourceType()) ? null : event.getResultSourceType().getId();
         if (!Objects.isNull(event.getNewResults())) {
             event.getNewResults().forEach((key, value) -> {
                 if (!results.containsKey(key)) {

@@ -5,14 +5,14 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 import java.util.UUID;
 
-public class ExperimentUpdateDTO {
+public class TrainingUpdateDTO {
     private String classifierId;
     @SerializedName(value = "model_id", alternate = "modelId")
     private UUID modelId;
     private boolean finished;
     private List<MetricDTO> metrics;
 
-    public ExperimentUpdateDTO(String classifierId, UUID modelId, boolean finished, List<MetricDTO> metrics) {
+    public TrainingUpdateDTO(String classifierId, UUID modelId, boolean finished, List<MetricDTO> metrics) {
         this.classifierId = classifierId;
         this.modelId = modelId;
         this.finished = finished;

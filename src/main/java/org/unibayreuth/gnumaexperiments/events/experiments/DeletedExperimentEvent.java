@@ -16,7 +16,7 @@ public class DeletedExperimentEvent {
     @Override
     public String toString() {
         return "DeletedExperimentEvent{" +
-                "id=" + id +
+                "id=" + id.toString() +
                 '}';
     }
 }

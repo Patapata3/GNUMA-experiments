@@ -16,7 +16,7 @@ public class StopExperimentEvent {
     @Override
     public String toString() {
         return "StopExperimentEvent{" +
-                "id=" + id +
+                "id=" + id.toString() +
                 '}';
     }
 }

@@ -26,7 +26,8 @@ public class ExperimentProjector {
 
     @EventHandler
     public void handle(CreatedExperimentEvent event) {
-        ExperimentView view = new ExperimentView(event.getId(), event.getDate(), event.getStatus(), event.getClassifier(), event.getTrainDatasetId(), event.getTestDatasetId());
+        ExperimentView view = new ExperimentView(event.getId(), event.getDate(), event.getStatus(), event.getClassifier(),
+                event.getTrainDatasetId(), event.getTestDatasetId());
         experimentViewRepository.save(view);
     }
 
@@ -39,6 +40,8 @@ public class ExperimentProjector {
     public void handle(UpdatedExperimentEvent event) {
         experimentViewRepository.findById(event.getId()).ifPresent(experimentView -> {
             experimentView.setStatus(event.getStatus());
+            experimentView.setResultDatasetId(event.getResultSourceId());
+            experimentView.setResultSourceType(event.getResultSourceType());
             if (!Objects.isNull(event.getNewResults())) {
                 writeResults(experimentView, event.getNewResults());
             }

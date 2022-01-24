@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.unibayreuth.gnumaexperiments.GNUMAConstants;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ResultSourceType;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -16,6 +17,8 @@ public class ExperimentView {
     private ExperimentClassifier classifier;
     private UUID trainDatasetId;
     private UUID testDatasetId;
+    private UUID resultDatasetId;
+    private String resultSourceType;
     private Map<String, List<Double>> results = new HashMap<>();
 
     public ExperimentView() {
@@ -68,7 +71,7 @@ public class ExperimentView {
     }
 
     public void setStatus(ExperimentStatus status) {
-        this.status = status.getId();
+        this.status = !Objects.isNull(status) ? status.getId() : null;
     }
 
     public UUID getTrainDatasetId() {
@@ -87,11 +90,27 @@ public class ExperimentView {
         this.testDatasetId = testDatasetId;
     }
 
+    public UUID getResultDatasetId() {
+        return resultDatasetId;
+    }
+
+    public void setResultDatasetId(UUID resultDatasetId) {
+        this.resultDatasetId = resultDatasetId;
+    }
+
+    public ResultSourceType getResultSourceType() {
+        return !Objects.isNull(resultSourceType) ? ResultSourceType.valueOf(resultSourceType) : null;
+    }
+
+    public void setResultSourceType(ResultSourceType resultSourceType) {
+        this.resultSourceType = !Objects.isNull(resultSourceType) ? resultSourceType.getId() : null;
+    }
+
     @Override
     public String toString() {
         SimpleDateFormat format = new SimpleDateFormat(GNUMAConstants.DATE_FORMAT);
         return "ExperimentView{" +
-                "id=" + id +
+                "id=" + id.toString() +
                 ", date=" + format.format(date) +
                 '}';
     }

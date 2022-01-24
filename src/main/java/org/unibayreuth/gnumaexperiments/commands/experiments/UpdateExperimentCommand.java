@@ -2,6 +2,7 @@ package org.unibayreuth.gnumaexperiments.commands.experiments;
 
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ResultSourceType;
 
 import java.util.Map;
 import java.util.Objects;
@@ -12,11 +13,21 @@ public class UpdateExperimentCommand {
     private UUID id;
     private ExperimentStatus status;
     private Map<String, Double> newResults;
+    private UUID resultSourceId;
+    private ResultSourceType resultSourceType;
 
     public UpdateExperimentCommand(UUID id, ExperimentStatus status, Map<String, Double> newResults) {
         this.id = id;
         this.status = status;
         this.newResults = newResults;
+    }
+
+    public UpdateExperimentCommand(UUID id, ExperimentStatus status, Map<String, Double> newResults, UUID resultSourceId, ResultSourceType resultSourceType) {
+        this.id = id;
+        this.status = status;
+        this.newResults = newResults;
+        this.resultSourceId = resultSourceId;
+        this.resultSourceType = resultSourceType;
     }
 
     public UUID getId() {
@@ -29,6 +40,14 @@ public class UpdateExperimentCommand {
 
     public Map<String, Double> getNewResults() {
         return newResults;
+    }
+
+    public UUID getResultSourceId() {
+        return resultSourceId;
+    }
+
+    public ResultSourceType getResultSourceType() {
+        return resultSourceType;
     }
 
     @Override
@@ -47,7 +66,7 @@ public class UpdateExperimentCommand {
     @Override
     public String toString() {
         return "UpdateExperimentCommand{" +
-                "id=" + id +
+                "id=" + id.toString() +
                 '}';
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.unibayreuth.gnumaexperiments.commands.experiments.UpdateExperimentCommand;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
-import org.unibayreuth.gnumaexperiments.dto.ExperimentUpdateDTO;
+import org.unibayreuth.gnumaexperiments.dto.TrainingUpdateDTO;
 import org.unibayreuth.gnumaexperiments.dto.MetricDTO;
 import org.unibayreuth.gnumaexperiments.exceptions.ServiceRequestException;
 import org.unibayreuth.gnumaexperiments.handlers.messagehandling.MessageHandler;
@@ -28,9 +28,9 @@ import static org.unibayreuth.gnumaexperiments.logging.GnumaLogger.*;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.*;
 
 @Component
-public class ExperimentUpdateHandler implements MessageHandler {
-    private final Logger log = LoggerFactory.getLogger(ExperimentUpdateHandler.class);
-    private static final String TYPE = "ExperimentUpdate";
+public class TrainingUpdateHandler implements MessageHandler {
+    private final Logger log = LoggerFactory.getLogger(TrainingUpdateHandler.class);
+    private static final String TYPE = "TrainingUpdate";
 
     @Autowired
     private QueryGateway queryGateway;
@@ -49,7 +49,7 @@ public class ExperimentUpdateHandler implements MessageHandler {
         String messageBody = new String(message.getBody());
         log(log::info, String.format("Started handling of an experiment update message, message body:\n%s", messageBody));
         Gson gson = new Gson();
-        ExperimentUpdateDTO experimentUpdate = gson.fromJson(messageBody, ExperimentUpdateDTO.class);
+        TrainingUpdateDTO experimentUpdate = gson.fromJson(messageBody, TrainingUpdateDTO.class);
 
         log(log::debug, String.format("Looking for an experiment on a classifier {%s} and model {%s}",
                 experimentUpdate.getClassifierId(), experimentUpdate.getModelId()));

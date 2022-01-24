@@ -34,11 +34,15 @@ public class ExperimentMessageSource extends SpringAMQPMessageSource {
                 Objects.isNull(message.getMessageProperties().getHeader(HEADER_KEY))) {
             String errorMessage = String.format("Message must contain a non-empty header with the key \"%s\"", HEADER_KEY);
             log(log::error, errorMessage);
-            throw new IllegalArgumentException(errorMessage);
+            return;
         }
 
         String messageType = message.getMessageProperties().getHeader(HEADER_KEY);
-        log(log::info, String.format("Received message of type {%s}", messageType));
-        messageHandlerRepository.handle(messageType, message);
+        log(log::info, String.format("Received message of type {%s}, starting handling", messageType));
+        try {
+            messageHandlerRepository.get(messageType).handle(message);
+        } catch (Exception e) {
+            log(log::error, e.getMessage(), e);
+        }
     }
 }
