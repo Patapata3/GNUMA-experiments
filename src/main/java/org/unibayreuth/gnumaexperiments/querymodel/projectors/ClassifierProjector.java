@@ -5,6 +5,7 @@ import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.unibayreuth.gnumaexperiments.events.classifiers.UpdatedClassifierEvent;
+import org.unibayreuth.gnumaexperiments.queries.classifiers.RetrieveAddressListClassifierQuery;
 import org.unibayreuth.gnumaexperiments.views.ClassifierView;
 import org.unibayreuth.gnumaexperiments.events.classifiers.CreatedClassifierEvent;
 import org.unibayreuth.gnumaexperiments.events.classifiers.DeletedClassifierEvent;
@@ -54,5 +55,10 @@ public class ClassifierProjector {
     @QueryHandler
     public List<ClassifierView> handle(RetrieveAddressClassifiersQuery query) {
         return classifierViewRepository.findAllByAddress(query.getAddress());
+    }
+
+    @QueryHandler
+    public List<ClassifierView> handle(RetrieveAddressListClassifierQuery query) {
+        return classifierViewRepository.findAllByAddressIn(query.getAddresses());
     }
 }

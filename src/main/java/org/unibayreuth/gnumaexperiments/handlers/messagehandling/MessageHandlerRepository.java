@@ -14,13 +14,17 @@ public class MessageHandlerRepository {
 
     private final Map<String, MessageHandler> handlerMap;
 
+    /**
+     * Constructor, collecting all the beans, implementing {@link MessageHandler}
+     * @param messageHandlers - list of handlers from the application context
+     */
     @Autowired
     public MessageHandlerRepository(List<MessageHandler> messageHandlers) {
         handlerMap = messageHandlers.stream()
                 .collect(Collectors.toMap(MessageHandler::getType, value -> value));
     }
 
-    public MessageHandler get(String type) {
+    public MessageHandler getHandler(String type) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(type), "Event type cannot be empty");
         if (!handlerMap.containsKey(type)) {
             String errorMessage = String.format("No handler exists for the event of type {%s}", type);

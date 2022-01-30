@@ -6,21 +6,20 @@ import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStat
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class CreatedExperimentEvent {
     private final UUID id;
     private Date date;
-    private ExperimentStatus status;
-    private ExperimentClassifier classifier;
+    private List<ExperimentClassifier> classifiers;
     private UUID trainDatasetId;
     private UUID testDatasetId;
 
-    public CreatedExperimentEvent(UUID id, Date date, ExperimentStatus status, ExperimentClassifier classifier, UUID trainDatasetId, UUID testDatasetId) {
+    public CreatedExperimentEvent(UUID id, Date date, List<ExperimentClassifier> classifiers, UUID trainDatasetId, UUID testDatasetId) {
         this.id = id;
         this.date = date;
-        this.status = status;
-        this.classifier = classifier;
+        this.classifiers = classifiers;
         this.trainDatasetId = trainDatasetId;
         this.testDatasetId = testDatasetId;
     }
@@ -29,16 +28,12 @@ public class CreatedExperimentEvent {
         return id;
     }
 
-    public ExperimentClassifier getClassifier() {
-        return classifier;
+    public List<ExperimentClassifier> getClassifiers() {
+        return classifiers;
     }
 
     public Date getDate() {
         return date;
-    }
-
-    public ExperimentStatus getStatus() {
-        return status;
     }
 
     public UUID getTrainDatasetId() {

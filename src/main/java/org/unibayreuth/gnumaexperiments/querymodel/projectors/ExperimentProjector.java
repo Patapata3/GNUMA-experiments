@@ -6,6 +6,7 @@ import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.events.experiments.CreatedExperimentEvent;
 import org.unibayreuth.gnumaexperiments.events.experiments.DeletedExperimentEvent;
 import org.unibayreuth.gnumaexperiments.events.experiments.UpdatedExperimentEvent;
@@ -26,7 +27,7 @@ public class ExperimentProjector {
 
     @EventHandler
     public void handle(CreatedExperimentEvent event) {
-        ExperimentView view = new ExperimentView(event.getId(), event.getDate(), event.getStatus(), event.getClassifier(),
+        ExperimentView view = new ExperimentView(event.getId(), event.getDate(), event.getClassifiers(),
                 event.getTrainDatasetId(), event.getTestDatasetId());
         experimentViewRepository.save(view);
     }
@@ -39,12 +40,7 @@ public class ExperimentProjector {
     @EventHandler
     public void handle(UpdatedExperimentEvent event) {
         experimentViewRepository.findById(event.getId()).ifPresent(experimentView -> {
-            experimentView.setStatus(event.getStatus());
-            experimentView.setResultDatasetId(event.getResultSourceId());
-            experimentView.setResultSourceType(event.getResultSourceType());
-            if (!Objects.isNull(event.getNewResults())) {
-                writeResults(experimentView, event.getNewResults());
-            }
+            updateExperimentClassifier(experimentView, event);
             experimentViewRepository.save(experimentView);
         });
     }
@@ -61,12 +57,21 @@ public class ExperimentProjector {
 
     @QueryHandler
     public ExperimentView handle(RetrieveClassifierModelExperimentQuery query) {
-        return experimentViewRepository.findByClassifier_RemoteIdAndClassifier_Model_RemoteId(query.getClassifierId(), query.getModelId())
+        return experimentViewRepository.findByClassifiersRemoteIdAndClassifiersAddressAndClassifiersModelRemoteId(query.getClassifierId(),
+                query.getAddress(), query.getModelId())
                 .orElse(null);
     }
 
-    private void writeResults(@NonNull ExperimentView experiment, @NonNull Map<String, Double> newResults) {
-        var currentResultMap = experiment.getResults();
+    private void updateExperimentClassifier(@NonNull ExperimentView experiment, @NonNull UpdatedExperimentEvent event) {
+        experiment.getClassifiers()
+                .stream()
+                .filter(classifier -> classifier.getId().equals(event.getClassifierId()))
+                .findAny()
+                .ifPresent(classifier -> writeResults(classifier, event.getNewResults()));
+    }
+
+    private void writeResults(@NonNull ExperimentClassifier classifier, @NonNull Map<String, Double> newResults) {
+        var currentResultMap = classifier.getResults();
         newResults.forEach((key, value) -> {
             if (!currentResultMap.containsKey(key)) {
                 currentResultMap.put(key, new ArrayList<>());

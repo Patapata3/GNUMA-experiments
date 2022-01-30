@@ -8,14 +8,16 @@ import java.util.UUID;
 
 public class EvalFinishDTO {
     private String classifierId;
+    private String address;
     @SerializedName(value = "model_id", alternate = "modelId")
     private UUID modelId;
     private UUID resultSourceId;
     private ResultSourceType resultSourceType;
     private Map<String, Double> results;
 
-    public EvalFinishDTO(String classifierId, UUID modelId, UUID resultSourceId, ResultSourceType resultSourceType, Map<String, Double> results) {
+    public EvalFinishDTO(String classifierId, String address, UUID modelId, UUID resultSourceId, ResultSourceType resultSourceType, Map<String, Double> results) {
         this.classifierId = classifierId;
+        this.address = address;
         this.modelId = modelId;
         this.resultSourceId = resultSourceId;
         this.resultSourceType = resultSourceType;
@@ -24,6 +26,10 @@ public class EvalFinishDTO {
 
     public String getClassifierId() {
         return classifierId;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     public UUID getModelId() {

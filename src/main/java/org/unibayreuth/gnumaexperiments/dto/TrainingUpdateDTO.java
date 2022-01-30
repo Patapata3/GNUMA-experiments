@@ -9,12 +9,20 @@ public class TrainingUpdateDTO {
     private String classifierId;
     @SerializedName(value = "model_id", alternate = "modelId")
     private UUID modelId;
+    private String address;
+    @SerializedName(value = "current_step", alternate = "currentStep")
+    private int currentStep;
+    @SerializedName(value = "total_steps", alternate = "totalSteps")
+    private int totalSteps;
     private boolean finished;
     private List<MetricDTO> metrics;
 
-    public TrainingUpdateDTO(String classifierId, UUID modelId, boolean finished, List<MetricDTO> metrics) {
+    public TrainingUpdateDTO(String classifierId, UUID modelId, String address, int currentStep, int totalSteps, boolean finished, List<MetricDTO> metrics) {
         this.classifierId = classifierId;
         this.modelId = modelId;
+        this.address = address;
+        this.currentStep = currentStep;
+        this.totalSteps = totalSteps;
         this.finished = finished;
         this.metrics = metrics;
     }
@@ -33,5 +41,17 @@ public class TrainingUpdateDTO {
 
     public List<MetricDTO> getMetrics() {
         return metrics;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getCurrentStep() {
+        return currentStep;
+    }
+
+    public int getTotalSteps() {
+        return totalSteps;
     }
 }

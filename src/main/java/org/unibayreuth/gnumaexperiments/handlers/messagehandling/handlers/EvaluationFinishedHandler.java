@@ -9,9 +9,11 @@ import org.springframework.amqp.core.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.unibayreuth.gnumaexperiments.commands.experiments.UpdateExperimentCommand;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
 import org.unibayreuth.gnumaexperiments.dto.EvalFinishDTO;
 import org.unibayreuth.gnumaexperiments.handlers.messagehandling.MessageHandler;
+import org.unibayreuth.gnumaexperiments.handlers.messagehandling.workers.ExperimentWorker;
 import org.unibayreuth.gnumaexperiments.queries.experiments.RetrieveClassifierModelExperimentQuery;
 import org.unibayreuth.gnumaexperiments.views.ExperimentView;
 
@@ -31,6 +33,8 @@ public class EvaluationFinishedHandler implements MessageHandler {
     private CommandGateway commandGateway;
     @Autowired
     private QueryGateway queryGateway;
+    @Autowired
+    private ExperimentWorker experimentWorker;
 
     @Override
     public String getType() {
@@ -46,10 +50,18 @@ public class EvaluationFinishedHandler implements MessageHandler {
         log(log::debug, String.format("Looking for an experiment on classifier {%s} and model {%s}",
                 evalFinishDTO.getClassifierId(), evalFinishDTO.getModelId()));
         ExperimentView runningExperiment = queryGateway.query(new RetrieveClassifierModelExperimentQuery(evalFinishDTO.getClassifierId(),
-                evalFinishDTO.getModelId()), instanceOf(ExperimentView.class)).join();
+                evalFinishDTO.getAddress(), evalFinishDTO.getModelId()), instanceOf(ExperimentView.class)).join();
         if (Objects.isNull(runningExperiment)) {
             log(log::error, String.format("Experiment for classifier {%s} model {%s} not found",
                     evalFinishDTO.getClassifierId(), evalFinishDTO.getModelId()));
+            return;
+        }
+
+        ExperimentClassifier runningClassifier = experimentWorker.getClassifierByIdAndAddress(runningExperiment,
+                evalFinishDTO.getClassifierId(), evalFinishDTO.getAddress());
+        if (runningClassifier == null) {
+            log(log::error, String.format("Found no classifier in the experiment for classifierId=%s, address=%s",
+                    evalFinishDTO.getClassifierId(), evalFinishDTO.getAddress()));
             return;
         }
 
@@ -62,7 +74,7 @@ public class EvaluationFinishedHandler implements MessageHandler {
                                 HashMap::putAll);
 
         log(log::debug, "Updating experiment after evaluation was finished");
-        commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), ExperimentStatus.FINISH, testResultMap,
+        commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), runningClassifier.getId(), ExperimentStatus.FINISH, testResultMap,
                 evalFinishDTO.getResultSourceId(), evalFinishDTO.getResultSourceType()));
         log(log::info, "Experiment successfully finished");
     }

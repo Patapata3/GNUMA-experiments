@@ -11,19 +11,30 @@ import java.util.UUID;
 public class UpdateExperimentCommand {
     @TargetAggregateIdentifier
     private UUID id;
+    private UUID classifierId;
     private ExperimentStatus status;
     private Map<String, Double> newResults;
+    private Integer currentStep;
+    private Integer totalSteps;
     private UUID resultSourceId;
     private ResultSourceType resultSourceType;
 
-    public UpdateExperimentCommand(UUID id, ExperimentStatus status, Map<String, Double> newResults) {
+    public UpdateExperimentCommand(UUID id, UUID classifierId, ExperimentStatus status, Map<String, Double> newResults, Integer currentStep, Integer totalSteps) {
+        this(id, classifierId, status, newResults);
+        this.currentStep = currentStep;
+        this.totalSteps = totalSteps;
+    }
+
+    public UpdateExperimentCommand(UUID id, UUID classifierId, ExperimentStatus status, Map<String, Double> newResults) {
         this.id = id;
+        this.classifierId = classifierId;
         this.status = status;
         this.newResults = newResults;
     }
 
-    public UpdateExperimentCommand(UUID id, ExperimentStatus status, Map<String, Double> newResults, UUID resultSourceId, ResultSourceType resultSourceType) {
+    public UpdateExperimentCommand(UUID id, UUID classifierId, ExperimentStatus status, Map<String, Double> newResults, UUID resultSourceId, ResultSourceType resultSourceType) {
         this.id = id;
+        this.classifierId = classifierId;
         this.status = status;
         this.newResults = newResults;
         this.resultSourceId = resultSourceId;
@@ -32,6 +43,10 @@ public class UpdateExperimentCommand {
 
     public UUID getId() {
         return id;
+    }
+
+    public UUID getClassifierId() {
+        return classifierId;
     }
 
     public ExperimentStatus getStatus() {
@@ -50,6 +65,14 @@ public class UpdateExperimentCommand {
         return resultSourceType;
     }
 
+    public int getCurrentStep() {
+        return currentStep;
+    }
+
+    public int getTotalSteps() {
+        return totalSteps;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,7 +89,8 @@ public class UpdateExperimentCommand {
     @Override
     public String toString() {
         return "UpdateExperimentCommand{" +
-                "id=" + id.toString() +
+                "id=" + id +
+                ", classifierId=" + classifierId +
                 '}';
     }
 }

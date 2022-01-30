@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.*;
 
 @RestController
-@RequestMapping(value = "/experiment")
+@RequestMapping(value = "api/v1/experiment")
 public class ExperimentQueryController {
 
     private final QueryGateway queryGateway;

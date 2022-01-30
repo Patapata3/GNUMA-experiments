@@ -5,7 +5,8 @@ public enum ExperimentStatus {
     PAUSE("PAUSE"),
     STOP("STOP"),
     EVAL("EVAL"),
-    FINISH("FINISH");
+    FINISH("FINISH"),
+    ERROR("ERROR");
 
     private final String id;
 

@@ -4,10 +4,12 @@ import java.util.UUID;
 
 public class RetrieveClassifierModelExperimentQuery {
     private String classifierId;
+    private String address;
     private UUID modelId;
 
-    public RetrieveClassifierModelExperimentQuery(String classifierId, UUID modelId) {
+    public RetrieveClassifierModelExperimentQuery(String classifierId, String address, UUID modelId) {
         this.classifierId = classifierId;
+        this.address = address;
         this.modelId = modelId;
     }
 
@@ -17,6 +19,10 @@ public class RetrieveClassifierModelExperimentQuery {
 
     public UUID getModelId() {
         return modelId;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     @Override

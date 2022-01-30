@@ -9,4 +9,6 @@ import java.util.List;
 public interface ClassifierViewRepository extends MongoRepository<ClassifierView, String> {
     @NonNull
     List<ClassifierView> findAllByAddress(@NonNull String address);
+    @NonNull
+    List<ClassifierView> findAllByAddressIn(@NonNull List<String> addresses);
 }

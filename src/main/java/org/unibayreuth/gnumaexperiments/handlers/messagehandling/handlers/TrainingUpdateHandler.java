@@ -9,11 +9,13 @@ import org.springframework.amqp.core.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.unibayreuth.gnumaexperiments.commands.experiments.UpdateExperimentCommand;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
 import org.unibayreuth.gnumaexperiments.dto.TrainingUpdateDTO;
 import org.unibayreuth.gnumaexperiments.dto.MetricDTO;
 import org.unibayreuth.gnumaexperiments.exceptions.ServiceRequestException;
 import org.unibayreuth.gnumaexperiments.handlers.messagehandling.MessageHandler;
+import org.unibayreuth.gnumaexperiments.handlers.messagehandling.workers.ExperimentWorker;
 import org.unibayreuth.gnumaexperiments.queries.experiments.RetrieveClassifierModelExperimentQuery;
 import org.unibayreuth.gnumaexperiments.service.RequestSenderServiceBean;
 import org.unibayreuth.gnumaexperiments.views.ExperimentView;
@@ -38,6 +40,8 @@ public class TrainingUpdateHandler implements MessageHandler {
     private CommandGateway commandGateway;
     @Autowired
     private RequestSenderServiceBean requestSenderService;
+    @Autowired
+    private ExperimentWorker experimentWorker;
 
     @Override
     public String getType() {
@@ -53,11 +57,19 @@ public class TrainingUpdateHandler implements MessageHandler {
 
         log(log::debug, String.format("Looking for an experiment on a classifier {%s} and model {%s}",
                 experimentUpdate.getClassifierId(), experimentUpdate.getModelId()));
-        ExperimentView runningExperiment = queryGateway.query(new RetrieveClassifierModelExperimentQuery(experimentUpdate.getClassifierId(), experimentUpdate.getModelId()),
+        ExperimentView runningExperiment = queryGateway.query(new RetrieveClassifierModelExperimentQuery(experimentUpdate.getClassifierId(), experimentUpdate.getAddress(), experimentUpdate.getModelId()),
                 instanceOf(ExperimentView.class)).join();
         if (runningExperiment == null) {
-            log(log::error, String.format("Found no experiment for classifierId=%s and modelId=%s",
-                    experimentUpdate.getClassifierId(), experimentUpdate.getModelId()));
+            log(log::error, String.format("Found no experiment for classifierId=%s, address=%s and modelId=%s",
+                    experimentUpdate.getClassifierId(), experimentUpdate.getAddress(), experimentUpdate.getModelId()));
+            return;
+        }
+
+        ExperimentClassifier runningClassifier = experimentWorker.getClassifierByIdAndAddress(runningExperiment,
+                experimentUpdate.getClassifierId(), experimentUpdate.getAddress());
+        if (runningClassifier == null) {
+            log(log::error, String.format("Found no classifier in the experiment for classifierId=%s, address=%s",
+                    experimentUpdate.getClassifierId(), experimentUpdate.getAddress()));
             return;
         }
 
@@ -66,11 +78,12 @@ public class TrainingUpdateHandler implements MessageHandler {
                 experimentUpdate.getMetrics()
                         .stream()
                         .collect(Collectors.toMap(MetricDTO::getKey, MetricDTO::getValue));
-        commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), newStatus, newResults));
+        commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), runningClassifier.getId(), newStatus,
+                newResults, experimentUpdate.getCurrentStep(), experimentUpdate.getTotalSteps()));
 
         if (newStatus == ExperimentStatus.EVAL) {
             try {
-                requestSenderService.sendPostRequest(String.format("%s/evaluate/%s", runningExperiment.getClassifier().getAddress(), experimentUpdate.getModelId()),
+                requestSenderService.sendPostRequest(String.format("%s/evaluate/%s", runningClassifier.getAddress(), experimentUpdate.getModelId()),
                         gson.toJson(String.format("{dataset_id: %s}", runningExperiment.getTestDatasetId())));
             } catch (IOException | InterruptedException | ServiceRequestException e) {
                 log(log::error, e.getMessage(), e);

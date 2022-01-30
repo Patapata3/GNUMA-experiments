@@ -11,10 +11,12 @@ import org.unibayreuth.gnumaexperiments.commands.experiments.PauseExperimentComm
 import org.unibayreuth.gnumaexperiments.commands.experiments.ResumeExperimentCommand;
 import org.unibayreuth.gnumaexperiments.commands.experiments.StartExperimentCommand;
 import org.unibayreuth.gnumaexperiments.commands.experiments.StopExperimentCommand;
+import org.unibayreuth.gnumaexperiments.dto.ExperimentClassifierDTO;
 import org.unibayreuth.gnumaexperiments.dto.ExperimentDTO;
 import org.unibayreuth.gnumaexperiments.handlers.exceptionhandling.ExperimentError;
 import org.unibayreuth.gnumaexperiments.handlers.exceptionhandling.ExperimentErrorCode;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -22,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.unibayreuth.gnumaexperiments.logging.GnumaLogger.*;
 
 @RestController
-@RequestMapping(value = "/experiment")
+@RequestMapping(value = "api/v1/experiment")
 public class ExperimentCommandController {
     private final Logger log = LoggerFactory.getLogger(ExperimentCommandController.class);
 
@@ -36,32 +38,33 @@ public class ExperimentCommandController {
     @CrossOrigin
     @PostMapping
     public CompletableFuture<ResponseEntity<String>> startExperiment(@RequestBody ExperimentDTO experimentDTO) {
-        return commandGateway.send(new StartExperimentCommand(experimentDTO.getTrainDatasetId(), experimentDTO.getTestDatasetId(), experimentDTO.getClassifier()))
-                .thenApply(it -> ResponseEntity.ok(""))
+        UUID id = UUID.randomUUID();
+        return commandGateway.send(new StartExperimentCommand(id, experimentDTO.getTrainDatasetId(), experimentDTO.getTestDatasetId(), experimentDTO.getClassifier()))
+                .thenApply(it -> ResponseEntity.ok(String.format("{id: %s}", id)))
                 .exceptionally(e -> formErrorResponse(e.getCause(), "start an experiment"));
     }
 
     @CrossOrigin
     @PutMapping("/pause/{id}")
-    public CompletableFuture<ResponseEntity<String>> pauseExperiment(@PathVariable UUID id) {
-        return commandGateway.send(new PauseExperimentCommand(id))
-                .thenApply(it -> ResponseEntity.ok(""))
+    public CompletableFuture<ResponseEntity<String>> pauseExperiment(@PathVariable UUID id, @RequestBody List<ExperimentClassifierDTO> pausedClassifiers) {
+        return commandGateway.send(new PauseExperimentCommand(id, pausedClassifiers))
+                .thenApply(it -> ResponseEntity.ok(String.format("{id: %s}", id)))
                 .exceptionally(e -> formErrorResponse(e.getCause(), "pause an experiment"));
     }
 
     @CrossOrigin
     @PutMapping("/stop/{id}")
-    public CompletableFuture<ResponseEntity<String>> stopExperiment(@PathVariable UUID id) {
-        return commandGateway.send(new StopExperimentCommand(id))
-                .thenApply(it -> ResponseEntity.ok(""))
+    public CompletableFuture<ResponseEntity<String>> stopExperiment(@PathVariable UUID id, @RequestBody List<ExperimentClassifierDTO> stoppedClassifiers) {
+        return commandGateway.send(new StopExperimentCommand(id, stoppedClassifiers))
+                .thenApply(it -> ResponseEntity.ok(String.format("{id: %s}", id.toString())))
                 .exceptionally(e -> formErrorResponse(e.getCause(), "stop an experiment"));
     }
 
     @CrossOrigin
     @PutMapping("/resume/{id}")
-    public CompletableFuture<ResponseEntity<String>> resumeExperiment(@PathVariable UUID id) {
-        return commandGateway.send(new ResumeExperimentCommand(id))
-                .thenApply(it -> ResponseEntity.ok(""))
+    public CompletableFuture<ResponseEntity<String>> resumeExperiment(@PathVariable UUID id, @RequestBody List<ExperimentClassifierDTO> resumedClassifiers) {
+        return commandGateway.send(new ResumeExperimentCommand(id, resumedClassifiers))
+                .thenApply(it -> ResponseEntity.ok(String.format("{id: %s}", id.toString())))
                 .exceptionally(e -> formErrorResponse(e.getCause(), "resume an experiment"));
     }
 
@@ -70,7 +73,7 @@ public class ExperimentCommandController {
             return ResponseEntity.badRequest()
                     .body(formErrorMessage((CommandExecutionException) e, failedAction));
         }
-        String errorMessage = String.format("Unable to start %s due to unknown generic exception: %s", failedAction, e.getMessage());
+        String errorMessage = String.format("{\"error\": \"Unable to start %s due to unknown generic exception: %s\"}", failedAction, e.getMessage());
         log(log::error, errorMessage, e);
         return ResponseEntity.internalServerError().body(errorMessage);
     }

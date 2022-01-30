@@ -1,19 +1,20 @@
 package org.unibayreuth.gnumaexperiments.dto;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ExperimentDTO {
-    private ExperimentClassifierDTO classifier;
+    private List<ExperimentClassifierDTO> classifier;
     private UUID trainDatasetId;
     private UUID testDatasetId;
 
-    public ExperimentDTO(ExperimentClassifierDTO classifier, UUID trainDatasetId, UUID testDatasetId) {
+    public ExperimentDTO(List<ExperimentClassifierDTO> classifier, UUID trainDatasetId, UUID testDatasetId) {
         this.classifier = classifier;
         this.trainDatasetId = trainDatasetId;
         this.testDatasetId = testDatasetId;
     }
 
-    public ExperimentClassifierDTO getClassifier() {
+    public List<ExperimentClassifierDTO> getClassifier() {
         return classifier;
     }
 

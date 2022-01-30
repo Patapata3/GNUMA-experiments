@@ -8,21 +8,31 @@ import java.util.UUID;
 
 public class UpdatedExperimentEvent {
     private UUID id;
+    private UUID classifierId;
     private ExperimentStatus status;
     private Map<String, Double> newResults;
+    private Integer currentStep;
+    private Integer totalSteps;
     private UUID resultSourceId;
     private ResultSourceType resultSourceType;
 
-    public UpdatedExperimentEvent(UUID id, ExperimentStatus status, Map<String, Double> newResults, UUID resultSourceId, ResultSourceType resultSourceType) {
+    public UpdatedExperimentEvent(UUID id, UUID classifierId, ExperimentStatus status, Map<String, Double> newResults, Integer currentStep, Integer totalSteps, UUID resultSourceId, ResultSourceType resultSourceType) {
         this.id = id;
+        this.classifierId = classifierId;
         this.status = status;
         this.newResults = newResults;
+        this.currentStep = currentStep;
+        this.totalSteps = totalSteps;
         this.resultSourceId = resultSourceId;
         this.resultSourceType = resultSourceType;
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public UUID getClassifierId() {
+        return classifierId;
     }
 
     public ExperimentStatus getStatus() {
@@ -41,10 +51,19 @@ public class UpdatedExperimentEvent {
         return resultSourceType;
     }
 
+    public Integer getCurrentStep() {
+        return currentStep;
+    }
+
+    public Integer getTotalSteps() {
+        return totalSteps;
+    }
+
     @Override
     public String toString() {
         return "UpdatedExperimentEvent{" +
-                "id=" + id.toString() +
+                "id=" + id +
+                ", classifierId=" + classifierId +
                 '}';
     }
 }

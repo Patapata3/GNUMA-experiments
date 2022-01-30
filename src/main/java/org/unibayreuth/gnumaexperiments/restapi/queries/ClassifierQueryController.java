@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.*;
 
 @RestController
-@RequestMapping("/classifier")
+@RequestMapping("api/v1/classifier")
 public class ClassifierQueryController {
 
     private final QueryGateway queryGateway;

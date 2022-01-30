@@ -2,17 +2,20 @@ package org.unibayreuth.gnumaexperiments.commands.experiments;
 
 import org.unibayreuth.gnumaexperiments.dto.ExperimentClassifierDTO;
 
+import java.util.List;
 import java.util.UUID;
 
 public class StartExperimentCommand {
+    private UUID id;
     private UUID trainDatasetId;
     private UUID testDatasetId;
-    private ExperimentClassifierDTO experimentClassifierDTO;
+    private List<ExperimentClassifierDTO> experimentClassifierDTOList;
 
-    public StartExperimentCommand(UUID trainDatasetId, UUID testDatasetId, ExperimentClassifierDTO experimentClassifierDTO) {
+    public StartExperimentCommand(UUID id, UUID trainDatasetId, UUID testDatasetId, List<ExperimentClassifierDTO> experimentClassifierDTOList) {
+        this.id = id;
         this.trainDatasetId = trainDatasetId;
         this.testDatasetId = testDatasetId;
-        this.experimentClassifierDTO = experimentClassifierDTO;
+        this.experimentClassifierDTOList = experimentClassifierDTOList;
     }
 
     public UUID getTrainDatasetId() {
@@ -23,12 +26,14 @@ public class StartExperimentCommand {
         return testDatasetId;
     }
 
-    public ExperimentClassifierDTO getExperimentClassifierDTO() {
-        return experimentClassifierDTO;
+    public List<ExperimentClassifierDTO> getExperimentClassifierDTOList() {
+        return experimentClassifierDTOList;
     }
 
     @Override
     public String toString() {
-        return "StartExperimentCommand{}";
+        return "StartExperimentCommand{" +
+                "id=" + id +
+                '}';
     }
 }
