@@ -1,6 +1,5 @@
 package org.unibayreuth.gnumaexperiments.querymodel.projectors;
 
-import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,12 @@ import org.unibayreuth.gnumaexperiments.views.ExperimentView;
 
 import java.util.*;
 
+import static java.util.Optional.ofNullable;
+
 @Component
 public class ExperimentProjector {
     @Autowired
     private ExperimentViewRepository experimentViewRepository;
-    @Autowired
-    private CommandGateway commandGateway;
 
     @EventHandler
     public void handle(CreatedExperimentEvent event) {
@@ -67,16 +66,19 @@ public class ExperimentProjector {
                 .stream()
                 .filter(classifier -> classifier.getId().equals(event.getClassifierId()))
                 .findAny()
-                .ifPresent(classifier -> writeResults(classifier, event.getNewResults()));
+                .ifPresent(classifier -> writeResults(classifier, event));
     }
 
-    private void writeResults(@NonNull ExperimentClassifier classifier, @NonNull Map<String, Double> newResults) {
+    private void writeResults(@NonNull ExperimentClassifier classifier, @NonNull UpdatedExperimentEvent event) {
         var currentResultMap = classifier.getResults();
-        newResults.forEach((key, value) -> {
+        event.getNewResults().forEach((key, value) -> {
             if (!currentResultMap.containsKey(key)) {
                 currentResultMap.put(key, new ArrayList<>());
             }
             currentResultMap.get(key).add(value);
         });
+        classifier.setStatus(event.getStatus());
+        ofNullable(event.getCurrentStep()).ifPresent(classifier::setCurrentStep);
+        ofNullable(event.getTotalSteps()).ifPresent(classifier::setTotalSteps);
     }
 }

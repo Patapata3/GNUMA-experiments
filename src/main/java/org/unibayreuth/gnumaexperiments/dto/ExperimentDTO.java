@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.UUID;
 
 public class ExperimentDTO {
-    private List<ExperimentClassifierDTO> classifier;
+    private List<ExperimentClassifierDTO> classifiers;
     private UUID trainDatasetId;
     private UUID testDatasetId;
 
-    public ExperimentDTO(List<ExperimentClassifierDTO> classifier, UUID trainDatasetId, UUID testDatasetId) {
-        this.classifier = classifier;
+    public ExperimentDTO(List<ExperimentClassifierDTO> classifiers, UUID trainDatasetId, UUID testDatasetId) {
+        this.classifiers = classifiers;
         this.trainDatasetId = trainDatasetId;
         this.testDatasetId = testDatasetId;
     }
 
-    public List<ExperimentClassifierDTO> getClassifier() {
-        return classifier;
+    public List<ExperimentClassifierDTO> getClassifiers() {
+        return classifiers;
     }
 
     public UUID getTrainDatasetId() {

@@ -26,6 +26,9 @@ public class ExperimentClassifier {
     private UUID resultSourceId;
     private String resultSourceType;
 
+    public ExperimentClassifier() {
+    }
+
     public ExperimentClassifier(UUID id, ExperimentStatus status, String remoteId, String address, Model model) {
         this.id = id;
         this.status = status.getId();
@@ -112,5 +115,13 @@ public class ExperimentClassifier {
 
     public Integer getTotalSteps() {
         return totalSteps;
+    }
+
+    public void setCurrentStep(Integer currentStep) {
+        this.currentStep = currentStep;
+    }
+
+    public void setTotalSteps(Integer totalSteps) {
+        this.totalSteps = totalSteps;
     }
 }

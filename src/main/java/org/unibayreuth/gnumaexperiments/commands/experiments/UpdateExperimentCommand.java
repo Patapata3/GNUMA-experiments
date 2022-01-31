@@ -65,11 +65,11 @@ public class UpdateExperimentCommand {
         return resultSourceType;
     }
 
-    public int getCurrentStep() {
+    public Integer getCurrentStep() {
         return currentStep;
     }
 
-    public int getTotalSteps() {
+    public Integer getTotalSteps() {
         return totalSteps;
     }
 

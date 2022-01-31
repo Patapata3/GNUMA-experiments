@@ -39,7 +39,7 @@ public class ExperimentCommandController {
     @PostMapping
     public CompletableFuture<ResponseEntity<String>> startExperiment(@RequestBody ExperimentDTO experimentDTO) {
         UUID id = UUID.randomUUID();
-        return commandGateway.send(new StartExperimentCommand(id, experimentDTO.getTrainDatasetId(), experimentDTO.getTestDatasetId(), experimentDTO.getClassifier()))
+        return commandGateway.send(new StartExperimentCommand(id, experimentDTO.getTrainDatasetId(), experimentDTO.getTestDatasetId(), experimentDTO.getClassifiers()))
                 .thenApply(it -> ResponseEntity.ok(String.format("{id: %s}", id)))
                 .exceptionally(e -> formErrorResponse(e.getCause(), "start an experiment"));
     }
