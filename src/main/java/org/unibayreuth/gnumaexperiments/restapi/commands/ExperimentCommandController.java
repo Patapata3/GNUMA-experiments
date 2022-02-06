@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.unibayreuth.gnumaexperiments.commands.experiments.PauseExperimentCommand;
-import org.unibayreuth.gnumaexperiments.commands.experiments.ResumeExperimentCommand;
-import org.unibayreuth.gnumaexperiments.commands.experiments.StartExperimentCommand;
-import org.unibayreuth.gnumaexperiments.commands.experiments.StopExperimentCommand;
+import org.unibayreuth.gnumaexperiments.commands.experiments.*;
 import org.unibayreuth.gnumaexperiments.dto.ExperimentClassifierDTO;
 import org.unibayreuth.gnumaexperiments.dto.ExperimentDTO;
 import org.unibayreuth.gnumaexperiments.handlers.exceptionhandling.ExperimentError;
@@ -39,8 +36,8 @@ public class ExperimentCommandController {
     @PostMapping
     public CompletableFuture<ResponseEntity<String>> startExperiment(@RequestBody ExperimentDTO experimentDTO) {
         UUID id = UUID.randomUUID();
-        return commandGateway.send(new StartExperimentCommand(id, experimentDTO.getTrainDatasetId(), experimentDTO.getTestDatasetId(), experimentDTO.getClassifiers()))
-                .thenApply(it -> ResponseEntity.ok(String.format("{id: %s}", id)))
+        return commandGateway.send(new StartExperimentCommand(id, experimentDTO.getData(), experimentDTO.getDescription(), experimentDTO.getClassifiers()))
+                .thenApply(it -> ResponseEntity.ok(String.format("{\"id\": \"%s\"}", id)))
                 .exceptionally(e -> formErrorResponse(e.getCause(), "start an experiment"));
     }
 
@@ -48,7 +45,7 @@ public class ExperimentCommandController {
     @PutMapping("/pause/{id}")
     public CompletableFuture<ResponseEntity<String>> pauseExperiment(@PathVariable UUID id, @RequestBody List<ExperimentClassifierDTO> pausedClassifiers) {
         return commandGateway.send(new PauseExperimentCommand(id, pausedClassifiers))
-                .thenApply(it -> ResponseEntity.ok(String.format("{id: %s}", id)))
+                .thenApply(it -> ResponseEntity.ok(String.format("{\"id\": \"%s\"}", id)))
                 .exceptionally(e -> formErrorResponse(e.getCause(), "pause an experiment"));
     }
 
@@ -56,7 +53,7 @@ public class ExperimentCommandController {
     @PutMapping("/stop/{id}")
     public CompletableFuture<ResponseEntity<String>> stopExperiment(@PathVariable UUID id, @RequestBody List<ExperimentClassifierDTO> stoppedClassifiers) {
         return commandGateway.send(new StopExperimentCommand(id, stoppedClassifiers))
-                .thenApply(it -> ResponseEntity.ok(String.format("{id: %s}", id.toString())))
+                .thenApply(it -> ResponseEntity.ok(String.format("{\"id\": \"%s\"}", id.toString())))
                 .exceptionally(e -> formErrorResponse(e.getCause(), "stop an experiment"));
     }
 
@@ -64,8 +61,16 @@ public class ExperimentCommandController {
     @PutMapping("/resume/{id}")
     public CompletableFuture<ResponseEntity<String>> resumeExperiment(@PathVariable UUID id, @RequestBody List<ExperimentClassifierDTO> resumedClassifiers) {
         return commandGateway.send(new ResumeExperimentCommand(id, resumedClassifiers))
-                .thenApply(it -> ResponseEntity.ok(String.format("{id: %s}", id.toString())))
+                .thenApply(it -> ResponseEntity.ok(String.format("{\"id\": \"%s\"}", id.toString())))
                 .exceptionally(e -> formErrorResponse(e.getCause(), "resume an experiment"));
+    }
+
+    @CrossOrigin
+    @DeleteMapping("/{id}")
+    public CompletableFuture<ResponseEntity<String>> deleteExperiment(@PathVariable UUID id) {
+        return commandGateway.send(new DeleteExperimentCommand(id))
+                .thenApply(it -> ResponseEntity.ok(String.format("{\"id\": \"%s\"}", id.toString())))
+                .exceptionally(e -> formErrorResponse(e.getCause(), "delete an experiment"));
     }
 
     private ResponseEntity<String> formErrorResponse(Throwable e, String failedAction) {

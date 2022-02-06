@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class UpdatedExperimentEvent {
     private UUID id;
-    private UUID classifierId;
+    private UUID experimentClassifierId;
     private ExperimentStatus status;
     private Map<String, Double> newResults;
     private Integer currentStep;
@@ -16,9 +16,9 @@ public class UpdatedExperimentEvent {
     private UUID resultSourceId;
     private ResultSourceType resultSourceType;
 
-    public UpdatedExperimentEvent(UUID id, UUID classifierId, ExperimentStatus status, Map<String, Double> newResults, Integer currentStep, Integer totalSteps, UUID resultSourceId, ResultSourceType resultSourceType) {
+    public UpdatedExperimentEvent(UUID id, UUID experimentClassifierId, ExperimentStatus status, Map<String, Double> newResults, Integer currentStep, Integer totalSteps, UUID resultSourceId, ResultSourceType resultSourceType) {
         this.id = id;
-        this.classifierId = classifierId;
+        this.experimentClassifierId = experimentClassifierId;
         this.status = status;
         this.newResults = newResults;
         this.currentStep = currentStep;
@@ -31,8 +31,8 @@ public class UpdatedExperimentEvent {
         return id;
     }
 
-    public UUID getClassifierId() {
-        return classifierId;
+    public UUID getExperimentClassifierId() {
+        return experimentClassifierId;
     }
 
     public ExperimentStatus getStatus() {
@@ -63,7 +63,7 @@ public class UpdatedExperimentEvent {
     public String toString() {
         return "UpdatedExperimentEvent{" +
                 "id=" + id +
-                ", classifierId=" + classifierId +
+                ", classifierId=" + experimentClassifierId +
                 '}';
     }
 }

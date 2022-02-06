@@ -4,7 +4,7 @@ public enum ExperimentStatus {
     TRAIN("TRAIN"),
     PAUSE("PAUSE"),
     STOP("STOP"),
-    EVAL("EVAL"),
+    TEST("TEST"),
     FINISH("FINISH"),
     ERROR("ERROR");
 

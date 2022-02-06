@@ -1,8 +1,8 @@
 package org.unibayreuth.gnumaexperiments.events.experiments;
 
 import org.unibayreuth.gnumaexperiments.GNUMAConstants;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataConfig;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,15 +13,15 @@ public class CreatedExperimentEvent {
     private final UUID id;
     private Date date;
     private List<ExperimentClassifier> classifiers;
-    private UUID trainDatasetId;
-    private UUID testDatasetId;
+    private DataConfig data;
+    private String description;
 
-    public CreatedExperimentEvent(UUID id, Date date, List<ExperimentClassifier> classifiers, UUID trainDatasetId, UUID testDatasetId) {
+    public CreatedExperimentEvent(UUID id, Date date, List<ExperimentClassifier> classifiers, DataConfig data, String description) {
         this.id = id;
         this.date = date;
         this.classifiers = classifiers;
-        this.trainDatasetId = trainDatasetId;
-        this.testDatasetId = testDatasetId;
+        this.data = data;
+        this.description = description;
     }
 
     public UUID getId() {
@@ -36,12 +36,12 @@ public class CreatedExperimentEvent {
         return date;
     }
 
-    public UUID getTrainDatasetId() {
-        return trainDatasetId;
+    public DataConfig getData() {
+        return data;
     }
 
-    public UUID getTestDatasetId() {
-        return testDatasetId;
+    public String getDescription() {
+        return description;
     }
 
     @Override

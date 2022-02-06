@@ -9,22 +9,25 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.unibayreuth.gnumaexperiments.commands.experiments.*;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataConfig;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataSplit;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.Model;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
+import org.unibayreuth.gnumaexperiments.dto.DatasetDTO;
 import org.unibayreuth.gnumaexperiments.dto.ExperimentClassifierDTO;
 import org.unibayreuth.gnumaexperiments.dto.TrainRequestDTO;
 import org.unibayreuth.gnumaexperiments.exceptions.ExperimentValidationException;
 import org.unibayreuth.gnumaexperiments.exceptions.MissingEntityException;
 import org.unibayreuth.gnumaexperiments.exceptions.ServiceRequestException;
 import org.unibayreuth.gnumaexperiments.queries.classifiers.RetrieveAddressListClassifierQuery;
-import org.unibayreuth.gnumaexperiments.queries.classifiers.RetrieveIdClassifierQuery;
 import org.unibayreuth.gnumaexperiments.queries.experiments.RetrieveIdExperimentQuery;
 import org.unibayreuth.gnumaexperiments.service.RequestSenderServiceBean;
 import org.unibayreuth.gnumaexperiments.service.ValidationService;
+import org.unibayreuth.gnumaexperiments.util.RequestUtils;
 import org.unibayreuth.gnumaexperiments.views.ClassifierView;
 import org.unibayreuth.gnumaexperiments.views.ExperimentView;
 
@@ -50,6 +53,9 @@ public class ExperimentCommandHandler {
     @Autowired
     private RequestSenderServiceBean requestSenderService;
 
+    @Value("${dataset.service.address}")
+    private String datasetServiceAddress;
+
     @CommandHandler
     public void handle(StartExperimentCommand cmd) throws MissingEntityException, ExperimentValidationException, IOException, InterruptedException, ServiceRequestException {
         log(log::info, "Handling command to start an experiment");
@@ -72,8 +78,16 @@ public class ExperimentCommandHandler {
         }
         log(log::info, "End of experiment parameter validation");
 
-        List<ExperimentClassifier> startedClassifiers = startTrainingWithHandler(cmd.getTrainDatasetId(), classifierMap, classifierDTOList);
-        commandGateway.send(new CreateExperimentCommand(startedClassifiers, cmd.getTrainDatasetId(), cmd.getTestDatasetId()));
+        log(log::info, "Collecting split data from the dataset service");
+        DataConfig data = cmd.getData();
+        String url = RequestUtils.constructUrlWithParameters(datasetServiceAddress, String.format("/dataset/%s", data.getDatasetId()),
+                Map.of("validationSplit", data.getValidationSplit().toString(), "testSplit", data.getTestSplit().toString(), "seed", data.getSeed().toString()));
+        DatasetDTO splitDataset = new Gson().fromJson(requestSenderService.sendGetRequest(url).body(), DatasetDTO.class);
+        data.setDataSplit(new DataSplit(UUID.randomUUID(), splitDataset.getFolds().get(0).getTrain(), splitDataset.getFolds().get(0).getValid(), splitDataset.getTest()));
+        log(log::info, "Collecting split data from the dataset service finished");
+
+        List<ExperimentClassifier> startedClassifiers = startTrainingWithHandler(data.getDataSplit().getTrainData(), classifierMap, classifierDTOList);
+        commandGateway.send(new CreateExperimentCommand(cmd.getId(), startedClassifiers, data, cmd.getDescription()));
         log(log::info, "New experiment successfully created");
     }
 
@@ -191,13 +205,13 @@ public class ExperimentCommandHandler {
         }
     }
 
-    private List<ExperimentClassifier> startTrainingWithHandler(UUID trainDatasetId, Map<String, ClassifierView> classifierMap, List<ExperimentClassifierDTO> classifierDTOList) {
+    private List<ExperimentClassifier> startTrainingWithHandler(List<UUID> trainData, Map<String, ClassifierView> classifierMap, List<ExperimentClassifierDTO> classifierDTOList) {
         List<ExperimentClassifier> startedClassifiers = new ArrayList<>();
         for (ExperimentClassifierDTO classifierDTO : classifierDTOList) {
             try {
                 ClassifierView classifier = classifierMap.get(classifierDTO.getAddress());
                 log(log::info, String.format("Sending request to start training on the classifier %s to %s", classifier.getId(), classifier.getAddress()));
-                TrainRequestDTO trainRequest = new TrainRequestDTO(trainDatasetId, classifierDTO.getHyperParameterValues());
+                TrainRequestDTO trainRequest = new TrainRequestDTO(trainData, classifierDTO.getHyperParameterValues());
                 HttpResponse<String> classifierResponse = requestSenderService.sendPostRequest(String.format("%s/train", classifier.getAddress()),
                         new Gson().toJson(trainRequest), "Content-type", "application/json");
                 JSONObject jsonBody = new JSONObject(classifierResponse.body());

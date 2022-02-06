@@ -1,0 +1,16 @@
+{
+  "classifiers": [
+    {
+      "id": "class",
+      "address": "{{url}}/localhost:8081",
+      "hyperParameterValues": {
+        "param": "two"
+      }
+    }],
+  "data": {
+    "datasetId": "05b93617-a4ce-4ae5-a337-868f04955288",
+    "validationSplit": "0.6",
+    "testSplit": "0.6",
+    "seed": 42
+  }
+}

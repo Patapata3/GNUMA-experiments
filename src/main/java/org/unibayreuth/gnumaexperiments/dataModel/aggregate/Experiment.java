@@ -3,6 +3,7 @@ package org.unibayreuth.gnumaexperiments.dataModel.aggregate;
 import org.axonframework.modelling.command.AggregateMember;
 import org.unibayreuth.gnumaexperiments.commands.experiments.CreateExperimentCommand;
 import org.unibayreuth.gnumaexperiments.commands.experiments.DeleteExperimentCommand;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataConfig;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.events.experiments.CreatedExperimentEvent;
 import org.axonframework.commandhandling.CommandHandler;
@@ -19,8 +20,11 @@ public class Experiment {
     @AggregateIdentifier
     private UUID id;
     private Date date;
+    private String description;
     @AggregateMember
     private List<ExperimentClassifier> classifiers;
+    @AggregateMember
+    private DataConfig data;
     private UUID trainDatasetId;
     private UUID testDatasetId;
 
@@ -28,8 +32,8 @@ public class Experiment {
 
     @CommandHandler
     public Experiment(CreateExperimentCommand cmd) {
-        AggregateLifecycle.apply(new CreatedExperimentEvent(UUID.randomUUID(), new Date(), cmd.getClassifiers(),
-                cmd.getTrainDatasetId(), cmd.getTestDatasetId()));
+        AggregateLifecycle.apply(new CreatedExperimentEvent(cmd.getId(), new Date(), cmd.getClassifiers(),
+                cmd.getData(), cmd.getDescription()));
     }
 
     @CommandHandler
@@ -42,8 +46,8 @@ public class Experiment {
         id = event.getId();
         date = event.getDate();
         classifiers = event.getClassifiers();
-        trainDatasetId = event.getTrainDatasetId();
-        testDatasetId = event.getTestDatasetId();
+        data = event.getData();
+        description = event.getDescription();
     }
 
     @EventSourcingHandler

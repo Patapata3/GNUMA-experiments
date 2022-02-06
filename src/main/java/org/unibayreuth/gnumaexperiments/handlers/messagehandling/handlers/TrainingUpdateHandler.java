@@ -73,7 +73,7 @@ public class TrainingUpdateHandler implements MessageHandler {
             return;
         }
 
-        ExperimentStatus newStatus = experimentUpdate.isFinished() ? ExperimentStatus.EVAL : ExperimentStatus.TRAIN;
+        ExperimentStatus newStatus = experimentUpdate.isFinished() ? ExperimentStatus.TEST : ExperimentStatus.TRAIN;
         Map<String, Double> newResults = Objects.isNull(experimentUpdate.getMetrics()) ? new HashMap<>() :
                 experimentUpdate.getMetrics()
                         .stream()
@@ -81,10 +81,10 @@ public class TrainingUpdateHandler implements MessageHandler {
         commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), runningClassifier.getId(), newStatus,
                 newResults, experimentUpdate.getCurrentStep(), experimentUpdate.getTotalSteps()));
 
-        if (newStatus == ExperimentStatus.EVAL) {
+        if (newStatus == ExperimentStatus.TEST) {
             try {
                 requestSenderService.sendPostRequest(String.format("%s/evaluate/%s", runningClassifier.getAddress(), experimentUpdate.getModelId()),
-                        gson.toJson(String.format("{dataset_id: %s}", runningExperiment.getTestDatasetId())));
+                        String.format("{data: %s}", gson.toJson(runningExperiment.getData().getDataSplit().getTestData())));
             } catch (IOException | InterruptedException | ServiceRequestException e) {
                 log(log::error, e.getMessage(), e);
             }

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "3f422bf3-6261-4379-b476-e746e0ed3f48",
+    "date": "2022-01-31T13:28:05.420+00:00",
+    "classifiers": [
+      {
+        "id": "05b93617-a4ce-4ae5-a337-868f04955288",
+        "status": "FINISH",
+        "remoteId": "class",
+        "address": "https://53a21cc0-f9a5-4b37-bc0c-0a3706409b35.mock.pstmn.io/localhost:8081",
+        "model": {
+          "id": "9cacd6ed-575d-4c8c-b0b0-d2b83783a692",
+          "remoteId": "1a7b3ac8-40a8-47e1-8b68-fd4cd692af8a",
+          "hyperParameterValues": {
+            "param": "two"
+          }
+        },
+        "trainResults": {
+          "metric1": [
+            1.0
+          ],
+          "metric": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "testResults": {
+            "test_metric1": 1.0,
+            "test_metric": 1.0
+          },
+          "currentStep": 2,
+          "totalSteps": 2,
+          "resultSourceId": null,
+          "resultSourceType": null
+        }
+      }
+    ],
+    "data": {
+      "datasetId": "05b93617-a4ce-4ae5-a337-868f04955288",
+      "evalSplit": "0.6",
+      "testSplit": "0.6",
+      "seed": 42
+    }
+  }
+]

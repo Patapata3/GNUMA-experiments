@@ -2,6 +2,7 @@ package org.unibayreuth.gnumaexperiments.views;
 
 import org.springframework.data.annotation.Id;
 import org.unibayreuth.gnumaexperiments.GNUMAConstants;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataConfig;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
 
 import java.text.SimpleDateFormat;
@@ -12,18 +13,18 @@ public class ExperimentView {
     private UUID id;
     private Date date;
     private List<ExperimentClassifier> classifiers;
-    private UUID trainDatasetId;
-    private UUID testDatasetId;
+    private DataConfig data;
+    private String description;
 
     public ExperimentView() {
     }
 
-    public ExperimentView(UUID id, Date date, List<ExperimentClassifier> classifiers, UUID trainDatasetId, UUID testDatasetId) {
+    public ExperimentView(UUID id, Date date, List<ExperimentClassifier> classifiers, DataConfig data, String description) {
         this.id = id;
         this.date = date;
         this.classifiers = classifiers;
-        this.trainDatasetId = trainDatasetId;
-        this.testDatasetId = testDatasetId;
+        this.data = data;
+        this.description = description;
     }
 
     public UUID getId() {
@@ -50,20 +51,20 @@ public class ExperimentView {
         this.classifiers = classifiers;
     }
 
-    public UUID getTrainDatasetId() {
-        return trainDatasetId;
+    public DataConfig getData() {
+        return data;
     }
 
-    public void setTrainDatasetId(UUID trainDatasetId) {
-        this.trainDatasetId = trainDatasetId;
+    public void setData(DataConfig data) {
+        this.data = data;
     }
 
-    public UUID getTestDatasetId() {
-        return testDatasetId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTestDatasetId(UUID testDatasetId) {
-        this.testDatasetId = testDatasetId;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

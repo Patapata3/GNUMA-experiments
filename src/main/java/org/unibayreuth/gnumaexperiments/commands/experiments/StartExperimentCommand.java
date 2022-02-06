@@ -1,5 +1,6 @@
 package org.unibayreuth.gnumaexperiments.commands.experiments;
 
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataConfig;
 import org.unibayreuth.gnumaexperiments.dto.ExperimentClassifierDTO;
 
 import java.util.List;
@@ -7,23 +8,27 @@ import java.util.UUID;
 
 public class StartExperimentCommand {
     private UUID id;
-    private UUID trainDatasetId;
-    private UUID testDatasetId;
+    private DataConfig data;
+    private String description;
     private List<ExperimentClassifierDTO> experimentClassifierDTOList;
 
-    public StartExperimentCommand(UUID id, UUID trainDatasetId, UUID testDatasetId, List<ExperimentClassifierDTO> experimentClassifierDTOList) {
+    public StartExperimentCommand(UUID id, DataConfig data, String description, List<ExperimentClassifierDTO> experimentClassifierDTOList) {
         this.id = id;
-        this.trainDatasetId = trainDatasetId;
-        this.testDatasetId = testDatasetId;
+        this.data = data;
+        this.description = description;
         this.experimentClassifierDTOList = experimentClassifierDTOList;
     }
 
-    public UUID getTrainDatasetId() {
-        return trainDatasetId;
+    public UUID getId() {
+        return id;
     }
 
-    public UUID getTestDatasetId() {
-        return testDatasetId;
+    public DataConfig getData() {
+        return data;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public List<ExperimentClassifierDTO> getExperimentClassifierDTOList() {

@@ -6,7 +6,6 @@ import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.modelling.command.EntityId;
 import org.unibayreuth.gnumaexperiments.commands.experiments.UpdateExperimentCommand;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ResultSourceType;
 import org.unibayreuth.gnumaexperiments.events.experiments.UpdatedExperimentEvent;
 
 import java.util.*;
@@ -23,8 +22,6 @@ public class ExperimentClassifier {
     private Map<String, List<Double>> results = new HashMap<>();
     private Integer currentStep = 0;
     private Integer totalSteps = 0;
-    private UUID resultSourceId;
-    private String resultSourceType;
 
     public ExperimentClassifier() {
     }
@@ -46,8 +43,6 @@ public class ExperimentClassifier {
     @EventSourcingHandler
     public void handle(UpdatedExperimentEvent event) {
         status = !Objects.isNull(event.getStatus()) ? event.getStatus().getId() : null;
-        resultSourceId = event.getResultSourceId();
-        resultSourceType = Objects.isNull(event.getResultSourceType()) ? null : event.getResultSourceType().getId();
         if (!Objects.isNull(event.getNewResults())) {
             event.getNewResults().forEach((key, value) -> {
                 if (!results.containsKey(key)) {
@@ -91,22 +86,6 @@ public class ExperimentClassifier {
 
     public void setStatus(ExperimentStatus status) {
         this.status = !Objects.isNull(status) ? status.getId() : null;
-    }
-
-    public UUID getResultSourceId() {
-        return resultSourceId;
-    }
-
-    public void setResultSourceId(UUID resultSourceId) {
-        this.resultSourceId = resultSourceId;
-    }
-
-    public ResultSourceType getResultSourceType() {
-        return !Objects.isNull(resultSourceType) ? ResultSourceType.valueOf(resultSourceType) : null;
-    }
-
-    public void setResultSourceType(ResultSourceType resultSourceType) {
-        this.resultSourceType = !Objects.isNull(resultSourceType) ? resultSourceType.getId() : null;
     }
 
     public Integer getCurrentStep() {

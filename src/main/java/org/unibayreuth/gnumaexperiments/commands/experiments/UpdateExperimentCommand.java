@@ -11,7 +11,7 @@ import java.util.UUID;
 public class UpdateExperimentCommand {
     @TargetAggregateIdentifier
     private UUID id;
-    private UUID classifierId;
+    private UUID experimentClassifierId;
     private ExperimentStatus status;
     private Map<String, Double> newResults;
     private Integer currentStep;
@@ -19,22 +19,22 @@ public class UpdateExperimentCommand {
     private UUID resultSourceId;
     private ResultSourceType resultSourceType;
 
-    public UpdateExperimentCommand(UUID id, UUID classifierId, ExperimentStatus status, Map<String, Double> newResults, Integer currentStep, Integer totalSteps) {
-        this(id, classifierId, status, newResults);
+    public UpdateExperimentCommand(UUID id, UUID experimentClassifierId, ExperimentStatus status, Map<String, Double> newResults, Integer currentStep, Integer totalSteps) {
+        this(id, experimentClassifierId, status, newResults);
         this.currentStep = currentStep;
         this.totalSteps = totalSteps;
     }
 
-    public UpdateExperimentCommand(UUID id, UUID classifierId, ExperimentStatus status, Map<String, Double> newResults) {
+    public UpdateExperimentCommand(UUID id, UUID experimentClassifierId, ExperimentStatus status, Map<String, Double> newResults) {
         this.id = id;
-        this.classifierId = classifierId;
+        this.experimentClassifierId = experimentClassifierId;
         this.status = status;
         this.newResults = newResults;
     }
 
-    public UpdateExperimentCommand(UUID id, UUID classifierId, ExperimentStatus status, Map<String, Double> newResults, UUID resultSourceId, ResultSourceType resultSourceType) {
+    public UpdateExperimentCommand(UUID id, UUID experimentClassifierId, ExperimentStatus status, Map<String, Double> newResults, UUID resultSourceId, ResultSourceType resultSourceType) {
         this.id = id;
-        this.classifierId = classifierId;
+        this.experimentClassifierId = experimentClassifierId;
         this.status = status;
         this.newResults = newResults;
         this.resultSourceId = resultSourceId;
@@ -45,8 +45,8 @@ public class UpdateExperimentCommand {
         return id;
     }
 
-    public UUID getClassifierId() {
-        return classifierId;
+    public UUID getExperimentClassifierId() {
+        return experimentClassifierId;
     }
 
     public ExperimentStatus getStatus() {
@@ -90,7 +90,7 @@ public class UpdateExperimentCommand {
     public String toString() {
         return "UpdateExperimentCommand{" +
                 "id=" + id +
-                ", classifierId=" + classifierId +
+                ", classifierId=" + experimentClassifierId +
                 '}';
     }
 }

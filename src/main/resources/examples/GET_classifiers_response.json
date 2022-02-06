@@ -1,0 +1,53 @@
+[
+  {
+    "id": "classifier1",
+    "address": "testAddress",
+    "hyperParameters": [
+      {
+        "id": "53142768-cc2f-4491-91b6-3bbad130358c",
+        "key": "param",
+        "type": "STRING",
+        "optional": true,
+        "defaultValue": "one",
+        "valueList": [
+          "one",
+          "two"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "class",
+    "address": "https://53a21cc0-f9a5-4b37-bc0c-0a3706409b35.mock.pstmn.io/localhost:8081",
+    "hyperParameters": [
+      {
+        "id": "ac01e663-ff78-4ea7-a904-ae50716b7f3b",
+        "key": "param",
+        "type": "STRING",
+        "optional": true,
+        "defaultValue": null,
+        "valueList": [
+          "one",
+          "two"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "class2",
+    "address": "localhost:8081",
+    "hyperParameters": [
+      {
+        "id": "178fb559-d6bf-4d42-b1a3-7cedaeeadf12",
+        "key": "param",
+        "type": "STRING",
+        "optional": true,
+        "defaultValue": null,
+        "valueList": [
+          "one",
+          "two"
+        ]
+      }
+    ]
+  }
+]

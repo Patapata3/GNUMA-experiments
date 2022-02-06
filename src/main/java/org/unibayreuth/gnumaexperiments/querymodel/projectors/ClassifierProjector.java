@@ -53,8 +53,8 @@ public class ClassifierProjector {
     }
 
     @QueryHandler
-    public List<ClassifierView> handle(RetrieveAddressClassifiersQuery query) {
-        return classifierViewRepository.findAllByAddress(query.getAddress());
+    public ClassifierView handle(RetrieveAddressClassifiersQuery query) {
+        return classifierViewRepository.findByAddress(query.getAddress()).orElse(null);
     }
 
     @QueryHandler

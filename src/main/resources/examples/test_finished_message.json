@@ -1,0 +1,11 @@
+{
+  "id": "05b93617-a4ce-4ae5-a337-868f04955288",
+  "experimentClassifierId": "05b93617-a4ce-4ae5-a337-868f04955288",
+  "status": "FINISH",
+  "currentSteps": null,
+  "totalSteps": null,
+  "newResults": {
+    "metric1": 1.0,
+    "metric": 1.0
+  }
+}

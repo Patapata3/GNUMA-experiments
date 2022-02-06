@@ -1,32 +1,38 @@
 package org.unibayreuth.gnumaexperiments.commands.experiments;
 
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataConfig;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
 
 import java.util.List;
 import java.util.UUID;
 
 public class CreateExperimentCommand {
+    private UUID id;
     private List<ExperimentClassifier> classifiers;
-    private UUID trainDatasetId;
-    private UUID testDatasetId;
+    private DataConfig data;
+    private String description;
 
-    public CreateExperimentCommand(List<ExperimentClassifier> classifiers, UUID trainDatasetId, UUID testDatasetId) {
+    public CreateExperimentCommand(UUID id, List<ExperimentClassifier> classifiers, DataConfig data, String description) {
+        this.id = id;
         this.classifiers = classifiers;
-        this.trainDatasetId = trainDatasetId;
-        this.testDatasetId = testDatasetId;
+        this.data = data;
+        this.description = description;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public List<ExperimentClassifier> getClassifiers() {
         return classifiers;
     }
 
-    public UUID getTrainDatasetId() {
-        return trainDatasetId;
+    public DataConfig getData() {
+        return data;
     }
 
-    public UUID getTestDatasetId() {
-        return testDatasetId;
+    public String getDescription() {
+        return description;
     }
 
     @Override

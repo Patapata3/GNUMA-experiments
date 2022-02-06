@@ -27,7 +27,7 @@ public class ExperimentProjector {
     @EventHandler
     public void handle(CreatedExperimentEvent event) {
         ExperimentView view = new ExperimentView(event.getId(), event.getDate(), event.getClassifiers(),
-                event.getTrainDatasetId(), event.getTestDatasetId());
+                event.getData(), event.getDescription());
         experimentViewRepository.save(view);
     }
 
@@ -64,7 +64,7 @@ public class ExperimentProjector {
     private void updateExperimentClassifier(@NonNull ExperimentView experiment, @NonNull UpdatedExperimentEvent event) {
         experiment.getClassifiers()
                 .stream()
-                .filter(classifier -> classifier.getId().equals(event.getClassifierId()))
+                .filter(classifier -> classifier.getId().equals(event.getExperimentClassifierId()))
                 .findAny()
                 .ifPresent(classifier -> writeResults(classifier, event));
     }

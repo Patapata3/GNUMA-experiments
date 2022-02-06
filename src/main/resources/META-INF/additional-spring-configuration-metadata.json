@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "dataset.service.address",
+      "type": "java.lang.String",
+      "description": "Address of the dataset service."
+    }
+  ] }
