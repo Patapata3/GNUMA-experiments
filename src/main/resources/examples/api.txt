@@ -1,0 +1,16 @@
+GET: /api/v1/experiment - fetch all expermients => GET_experiments_response.json
+GET: /api/v1/classifier - fetch all classifiers => GET_classifiers_response.json
+GET: /api/v1/experiment/{id} - fetch experiment with a given id => response same as for all experiments, just not a list
+POST /api/v1/experiment - start an experiment, request body example in POST_experiment_request.json
+
+Messages:
+Exchange: GNUMAExchange
+Routnig key: Experiments.service
+
+Training update/finish message:
+Header: {event: ExperimentTrainingUpdate}
+body: Update_experiment_training_message.json
+
+Test finished message: 
+Header: {event: ExperimentTestFinish}
+body: test_finished_message.json

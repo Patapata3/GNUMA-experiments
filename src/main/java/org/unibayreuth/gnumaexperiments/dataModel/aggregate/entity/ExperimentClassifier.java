@@ -13,13 +13,14 @@ import java.util.*;
 import static java.util.Optional.ofNullable;
 
 public class ExperimentClassifier {
-    @EntityId(routingKey = "classifierId")
+    @EntityId(routingKey = "experimentClassifierId")
     private UUID id;
     private String status;
     private String remoteId;
     private String address;
     private Model model;
-    private Map<String, List<Double>> results = new HashMap<>();
+    private Map<String, List<Double>> trainResults = new HashMap<>();
+    private Map<String, Double> testResults = new HashMap<>();
     private Integer currentStep = 0;
     private Integer totalSteps = 0;
 
@@ -42,15 +43,20 @@ public class ExperimentClassifier {
 
     @EventSourcingHandler
     public void handle(UpdatedExperimentEvent event) {
-        status = !Objects.isNull(event.getStatus()) ? event.getStatus().getId() : null;
         if (!Objects.isNull(event.getNewResults())) {
-            event.getNewResults().forEach((key, value) -> {
-                if (!results.containsKey(key)) {
-                    results.put(key, new ArrayList<>());
-                }
-                results.get(key).add(value);
-            });
+            if (getStatus() == ExperimentStatus.TRAIN) {
+                event.getNewResults().forEach((key, value) -> {
+                    if (!trainResults.containsKey(key)) {
+                        trainResults.put(key, new ArrayList<>());
+                    }
+                    trainResults.get(key).add(value);
+                });
+            } else {
+                testResults.putAll(event.getNewResults());
+            }
         }
+
+        status = !Objects.isNull(event.getStatus()) ? event.getStatus().getId() : null;
         ofNullable(event.getCurrentStep()).ifPresent(currentStep -> this.currentStep = currentStep);
         ofNullable(event.getTotalSteps()).ifPresent(totalSteps -> this.totalSteps = totalSteps);
     }
@@ -71,12 +77,20 @@ public class ExperimentClassifier {
         return model;
     }
 
-    public Map<String, List<Double>> getResults() {
-        return results;
+    public Map<String, List<Double>> getTrainResults() {
+        return trainResults;
     }
 
-    public void setResults(Map<String, List<Double>> results) {
-        this.results = results;
+    public void setTrainResults(Map<String, List<Double>> trainResults) {
+        this.trainResults = trainResults;
+    }
+
+    public Map<String, Double> getTestResults() {
+        return testResults;
+    }
+
+    public void setTestResults(Map<String, Double> testResults) {
+        this.testResults = testResults;
     }
 
     public ExperimentStatus getStatus() {

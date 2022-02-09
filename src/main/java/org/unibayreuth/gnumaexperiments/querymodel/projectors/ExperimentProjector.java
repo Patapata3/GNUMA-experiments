@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
 import org.unibayreuth.gnumaexperiments.events.experiments.CreatedExperimentEvent;
 import org.unibayreuth.gnumaexperiments.events.experiments.DeletedExperimentEvent;
 import org.unibayreuth.gnumaexperiments.events.experiments.UpdatedExperimentEvent;
@@ -70,13 +71,17 @@ public class ExperimentProjector {
     }
 
     private void writeResults(@NonNull ExperimentClassifier classifier, @NonNull UpdatedExperimentEvent event) {
-        var currentResultMap = classifier.getResults();
-        event.getNewResults().forEach((key, value) -> {
-            if (!currentResultMap.containsKey(key)) {
-                currentResultMap.put(key, new ArrayList<>());
-            }
-            currentResultMap.get(key).add(value);
-        });
+        if (classifier.getStatus() == ExperimentStatus.TRAIN) {
+            var currentResultMap = classifier.getTrainResults();
+            event.getNewResults().forEach((key, value) -> {
+                if (!currentResultMap.containsKey(key)) {
+                    currentResultMap.put(key, new ArrayList<>());
+                }
+                currentResultMap.get(key).add(value);
+            });
+        } else {
+            classifier.getTestResults().putAll(event.getNewResults());
+        }
         classifier.setStatus(event.getStatus());
         ofNullable(event.getCurrentStep()).ifPresent(classifier::setCurrentStep);
         ofNullable(event.getTotalSteps()).ifPresent(classifier::setTotalSteps);
