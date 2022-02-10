@@ -8,14 +8,16 @@ public class DataConfig {
     @EntityId
     private UUID id;
     private UUID datasetId;
+    private String name;
     private Double testSplit;
     private Double validationSplit;
     private Integer seed;
     private DataSplit dataSplit;
 
-    public DataConfig(UUID id, UUID datasetId, Double testSplit, Double validationSplit, Integer seed, DataSplit dataSplit) {
+    public DataConfig(UUID id, UUID datasetId, String name, Double testSplit, Double validationSplit, Integer seed, DataSplit dataSplit) {
         this.id = id;
         this.datasetId = datasetId;
+        this.name = name;
         this.testSplit = testSplit;
         this.validationSplit = validationSplit;
         this.seed = seed;
@@ -38,6 +40,14 @@ public class DataConfig {
         this.datasetId = datasetId;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Double getTestSplit() {
         return testSplit;
     }
@@ -52,6 +62,10 @@ public class DataConfig {
 
     public Integer getSeed() {
         return seed;
+    }
+
+    public void setSeed(Integer seed) {
+        this.seed = seed;
     }
 
     public void setValidationSplit(Double validationSplit) {

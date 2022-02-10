@@ -8,11 +8,11 @@ import java.util.UUID;
 public class DataSplit {
     @EntityId
     private UUID id;
-    private List<UUID> trainData;
-    private List<UUID> validationData;
-    private List<UUID> testData;
+    private List<String> trainData;
+    private List<String> validationData;
+    private List<String> testData;
 
-    public DataSplit(UUID id, List<UUID> trainData, List<UUID> validationData, List<UUID> testData) {
+    public DataSplit(UUID id, List<String> trainData, List<String> validationData, List<String> testData) {
         this.id = id;
         this.trainData = trainData;
         this.validationData = validationData;
@@ -27,27 +27,27 @@ public class DataSplit {
         this.id = id;
     }
 
-    public List<UUID> getTrainData() {
+    public List<String> getTrainData() {
         return trainData;
     }
 
-    public void setTrainData(List<UUID> trainData) {
+    public void setTrainData(List<String> trainData) {
         this.trainData = trainData;
     }
 
-    public List<UUID> getValidationData() {
+    public List<String> getValidationData() {
         return validationData;
     }
 
-    public void setValidationData(List<UUID> validationData) {
+    public void setValidationData(List<String> validationData) {
         this.validationData = validationData;
     }
 
-    public List<UUID> getTestData() {
+    public List<String> getTestData() {
         return testData;
     }
 
-    public void setTestData(List<UUID> testData) {
+    public void setTestData(List<String> testData) {
         this.testData = testData;
     }
 }

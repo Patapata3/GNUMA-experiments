@@ -5,15 +5,15 @@ import java.util.Map;
 import java.util.UUID;
 
 public class TrainRequestDTO {
-    private List<UUID> data;
+    private List<String> data;
     private Map<String, String> hyperParameters;
 
-    public TrainRequestDTO(List<UUID> data, Map<String, String> hyperParameters) {
+    public TrainRequestDTO(List<String> data, Map<String, String> hyperParameters) {
         this.data = data;
         this.hyperParameters = hyperParameters;
     }
 
-    public List<UUID> getData() {
+    public List<String> getData() {
         return data;
     }
 

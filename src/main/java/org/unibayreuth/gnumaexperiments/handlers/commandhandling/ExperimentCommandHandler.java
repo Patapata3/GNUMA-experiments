@@ -205,7 +205,7 @@ public class ExperimentCommandHandler {
         }
     }
 
-    private List<ExperimentClassifier> startTrainingWithHandler(List<UUID> trainData, Map<String, ClassifierView> classifierMap, List<ExperimentClassifierDTO> classifierDTOList) {
+    private List<ExperimentClassifier> startTrainingWithHandler(List<String> trainData, Map<String, ClassifierView> classifierMap, List<ExperimentClassifierDTO> classifierDTOList) {
         List<ExperimentClassifier> startedClassifiers = new ArrayList<>();
         for (ExperimentClassifierDTO classifierDTO : classifierDTOList) {
             try {
