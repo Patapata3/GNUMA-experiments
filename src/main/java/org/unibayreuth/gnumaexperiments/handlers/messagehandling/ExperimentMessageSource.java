@@ -40,7 +40,7 @@ public class ExperimentMessageSource extends SpringAMQPMessageSource {
         String messageType = message.getMessageProperties().getHeader(HEADER_KEY);
         log(log::info, String.format("Received message of type {%s}, starting handling", messageType));
         try {
-            messageHandlerRepository.getHandler(messageType).handle(message);
+            messageHandlerRepository.getHandler(messageType.trim()).handle(message);
         } catch (Exception e) {
             log(log::error, e.getMessage(), e);
         }

@@ -90,7 +90,7 @@ public class ValidationServiceBean implements ValidationService {
             Integer.parseInt(value);
             return true;
         } catch (NumberFormatException e) {
-            return false;
+            return Strings.isNullOrEmpty(value);
         }
     }
 
@@ -99,7 +99,7 @@ public class ValidationServiceBean implements ValidationService {
             Double.parseDouble(value);
             return true;
         } catch (NumberFormatException e) {
-            return false;
+            return Strings.isNullOrEmpty(value);
         }
     }
 
