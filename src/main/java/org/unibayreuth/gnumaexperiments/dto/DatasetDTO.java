@@ -4,19 +4,32 @@ import java.util.List;
 import java.util.UUID;
 
 public class DatasetDTO {
-    List<String> test;
-    List<FoldDTO> folds;
 
-    public DatasetDTO(List<String> test, List<FoldDTO> folds) {
-        this.test = test;
-        this.folds = folds;
+    DataDTO data;
+
+    public DatasetDTO(DataDTO data) {
+        this.data = data;
     }
 
-    public List<String> getTest() {
-        return test;
+    public DataDTO getData() {
+        return data;
     }
 
-    public List<FoldDTO> getFolds() {
-        return folds;
+    public class DataDTO {
+        List<String> test;
+        List<FoldDTO> folds;
+
+        public DataDTO(List<FoldDTO> folds, List<String> test) {
+            this.test = test;
+            this.folds = folds;
+        }
+
+        public List<FoldDTO> getFolds() {
+            return folds;
+        }
+
+        public List<String> getTest() {
+            return test;
+        }
     }
 }

@@ -83,7 +83,7 @@ public class ExperimentCommandHandler {
         String url = RequestUtils.constructUrlWithParameters(datasetServiceAddress, String.format("/dataset/%s", data.getDatasetId()),
                 Map.of("validationSplit", data.getValidationSplit().toString(), "testSplit", data.getTestSplit().toString(), "seed", data.getSeed().toString()));
         DatasetDTO splitDataset = new Gson().fromJson(requestSenderService.sendGetRequest(url).body(), DatasetDTO.class);
-        data.setDataSplit(new DataSplit(UUID.randomUUID(), splitDataset.getFolds().get(0).getTrain(), splitDataset.getFolds().get(0).getValid(), splitDataset.getTest()));
+        data.setDataSplit(new DataSplit(UUID.randomUUID(), splitDataset.getData().getFolds().get(0).getTrain(), splitDataset.getData().getFolds().get(0).getValid(), splitDataset.getData().getTest()));
         log(log::info, "Collecting split data from the dataset service finished");
 
         List<ExperimentClassifier> startedClassifiers = startTrainingWithHandler(data.getDataSplit().getTrainData(), classifierMap, classifierDTOList);
