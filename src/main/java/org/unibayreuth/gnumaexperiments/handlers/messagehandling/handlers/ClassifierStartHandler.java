@@ -52,9 +52,9 @@ public class ClassifierStartHandler implements MessageHandler {
 
         List<HyperParameter> newHyperParameters = dtoConverterService.createHyperParametersFromDTO(newClassifier.getHyperParameters());
         commandGateway.send(!Objects.isNull(existingClassifier) ?
-                new UpdateClassifierCommand(newClassifier.getId(), existingClassifier.getAddress(), newHyperParameters) :
-                new CreateClassifierCommand(newClassifier.getId(), newClassifier.getAddress(), newHyperParameters));
+                new UpdateClassifierCommand(newClassifier.getClassifierName(), existingClassifier.getAddress(), newHyperParameters) :
+                new CreateClassifierCommand(newClassifier.getClassifierName(), newClassifier.getAddress(), newHyperParameters));
         log(log::info, String.format("Successfully saved classifier with id {%s} and address {%s}",
-                newClassifier.getId(), newClassifier.getAddress()));
+                newClassifier.getClassifierName(), newClassifier.getAddress()));
     }
 }

@@ -55,21 +55,20 @@ public class TrainingUpdateHandler implements MessageHandler {
         Gson gson = new Gson();
         TrainingUpdateDTO experimentUpdate = gson.fromJson(messageBody, TrainingUpdateDTO.class);
 
-        log(log::debug, String.format("Looking for an experiment on a classifier {%s} and model {%s}",
-                experimentUpdate.getClassifierId(), experimentUpdate.getModelId()));
-        ExperimentView runningExperiment = queryGateway.query(new RetrieveClassifierModelExperimentQuery(experimentUpdate.getClassifierId(), experimentUpdate.getAddress(), experimentUpdate.getModelId()),
+        log(log::debug, String.format("Looking for an experiment on a classifier at {%s} and model {%s}",
+                experimentUpdate.getAddress(), experimentUpdate.getModelId()));
+        ExperimentView runningExperiment = queryGateway.query(new RetrieveClassifierModelExperimentQuery(experimentUpdate.getAddress(), experimentUpdate.getModelId()),
                 instanceOf(ExperimentView.class)).join();
         if (runningExperiment == null) {
-            log(log::error, String.format("Found no experiment for classifierId=%s, address=%s and modelId=%s",
-                    experimentUpdate.getClassifierId(), experimentUpdate.getAddress(), experimentUpdate.getModelId()));
+            log(log::error, String.format("Found no experiment for address=%s and modelId=%s",
+                    experimentUpdate.getAddress(), experimentUpdate.getModelId()));
             return;
         }
 
-        ExperimentClassifier runningClassifier = experimentWorker.getClassifierByIdAndAddress(runningExperiment,
-                experimentUpdate.getClassifierId(), experimentUpdate.getAddress());
+        ExperimentClassifier runningClassifier = experimentWorker.getClassifierByAddress(runningExperiment,
+                experimentUpdate.getAddress());
         if (runningClassifier == null) {
-            log(log::error, String.format("Found no classifier in the experiment for classifierId=%s, address=%s",
-                    experimentUpdate.getClassifierId(), experimentUpdate.getAddress()));
+            log(log::error, String.format("Found no classifier in the experiment for address=%s", experimentUpdate.getAddress()));
             return;
         }
 
@@ -84,7 +83,7 @@ public class TrainingUpdateHandler implements MessageHandler {
         if (newStatus == ExperimentStatus.TEST) {
             try {
                 requestSenderService.sendPostRequest(String.format("%s/evaluate/%s", runningClassifier.getAddress(), experimentUpdate.getModelId()),
-                        String.format("{data: %s}", gson.toJson(runningExperiment.getData().getDataSplit().getTestData())));
+                        String.format("{doc_ids: %s}", gson.toJson(runningExperiment.getData().getDataSplit().getTestData())));
             } catch (IOException | InterruptedException | ServiceRequestException e) {
                 log(log::error, e.getMessage(), e);
             }
