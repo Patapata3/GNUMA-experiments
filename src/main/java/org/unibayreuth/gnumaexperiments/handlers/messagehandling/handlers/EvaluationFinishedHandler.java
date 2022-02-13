@@ -49,16 +49,15 @@ public class EvaluationFinishedHandler implements MessageHandler {
         EvalFinishDTO evalFinishDTO = new Gson().fromJson(messageBody, EvalFinishDTO.class);
         log(log::debug, String.format("Looking for an experiment on classifier {%s} and model {%s}",
                 evalFinishDTO.getClassifierId(), evalFinishDTO.getModelId()));
-        ExperimentView runningExperiment = queryGateway.query(new RetrieveClassifierModelExperimentQuery(evalFinishDTO.getClassifierId(),
-                evalFinishDTO.getAddress(), evalFinishDTO.getModelId()), instanceOf(ExperimentView.class)).join();
+        ExperimentView runningExperiment = queryGateway.query(new RetrieveClassifierModelExperimentQuery(evalFinishDTO.getAddress(), evalFinishDTO.getModelId()), instanceOf(ExperimentView.class)).join();
         if (Objects.isNull(runningExperiment)) {
             log(log::error, String.format("Experiment for classifier {%s} model {%s} not found",
                     evalFinishDTO.getClassifierId(), evalFinishDTO.getModelId()));
             return;
         }
 
-        ExperimentClassifier runningClassifier = experimentWorker.getClassifierByIdAndAddress(runningExperiment,
-                evalFinishDTO.getClassifierId(), evalFinishDTO.getAddress());
+        ExperimentClassifier runningClassifier = experimentWorker.getClassifierByAddress(runningExperiment,
+                evalFinishDTO.getAddress());
         if (runningClassifier == null) {
             log(log::error, String.format("Found no classifier in the experiment for classifierId=%s, address=%s",
                     evalFinishDTO.getClassifierId(), evalFinishDTO.getAddress()));

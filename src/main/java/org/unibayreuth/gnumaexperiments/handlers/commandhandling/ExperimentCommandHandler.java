@@ -86,7 +86,7 @@ public class ExperimentCommandHandler {
         data.setDataSplit(new DataSplit(UUID.randomUUID(), splitDataset.getData().getFolds().get(0).getTrain(), splitDataset.getData().getFolds().get(0).getValid(), splitDataset.getData().getTest()));
         log(log::info, "Collecting split data from the dataset service finished");
 
-        List<ExperimentClassifier> startedClassifiers = startTrainingWithHandler(data.getDataSplit().getTrainData(), classifierMap, classifierDTOList);
+        List<ExperimentClassifier> startedClassifiers = startTrainingWithHandler(data.getDataSplit(), cmd.getDescription(), classifierMap, classifierDTOList);
         commandGateway.send(new CreateExperimentCommand(cmd.getId(), startedClassifiers, data, cmd.getDescription()));
         log(log::info, "New experiment successfully created");
     }
@@ -205,13 +205,13 @@ public class ExperimentCommandHandler {
         }
     }
 
-    private List<ExperimentClassifier> startTrainingWithHandler(List<String> trainData, Map<String, ClassifierView> classifierMap, List<ExperimentClassifierDTO> classifierDTOList) {
+    private List<ExperimentClassifier> startTrainingWithHandler(DataSplit dataSplit, String description, Map<String, ClassifierView> classifierMap, List<ExperimentClassifierDTO> classifierDTOList) {
         List<ExperimentClassifier> startedClassifiers = new ArrayList<>();
         for (ExperimentClassifierDTO classifierDTO : classifierDTOList) {
             try {
                 ClassifierView classifier = classifierMap.get(classifierDTO.getAddress());
                 log(log::info, String.format("Sending request to start training on the classifier %s to %s", classifier.getId(), classifier.getAddress()));
-                TrainRequestDTO trainRequest = new TrainRequestDTO(trainData, classifierDTO.getHyperParameterValues());
+                TrainRequestDTO trainRequest = new TrainRequestDTO(dataSplit.getTrainData(), dataSplit.getValidationData(), description, classifierDTO.getHyperParameterValues());
                 HttpResponse<String> classifierResponse = requestSenderService.sendPostRequest(String.format("%s/train", classifier.getAddress()),
                         new Gson().toJson(trainRequest), "Content-type", "application/json");
                 JSONObject jsonBody = new JSONObject(classifierResponse.body());

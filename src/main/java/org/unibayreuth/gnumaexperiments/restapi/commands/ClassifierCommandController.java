@@ -33,7 +33,7 @@ public class ClassifierCommandController {
         List<HyperParameter> hyperParameters = Objects.isNull(newClassifier) ? new ArrayList<>() :
                 dtoConverterService.createHyperParametersFromDTO(newClassifier.getHyperParameters());
 
-        return commandGateway.send(new CreateClassifierCommand(newClassifier.getId(), newClassifier.getAddress(), hyperParameters));
+        return commandGateway.send(new CreateClassifierCommand(newClassifier.getClassifierName(), newClassifier.getAddress(), hyperParameters));
     }
 
     @CrossOrigin

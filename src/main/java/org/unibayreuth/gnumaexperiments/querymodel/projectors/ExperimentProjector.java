@@ -57,8 +57,7 @@ public class ExperimentProjector {
 
     @QueryHandler
     public ExperimentView handle(RetrieveClassifierModelExperimentQuery query) {
-        return experimentViewRepository.findByClassifiersRemoteIdAndClassifiersAddressAndClassifiersModelRemoteId(query.getClassifierId(),
-                query.getAddress(), query.getModelId())
+        return experimentViewRepository.findByClassifiersAddressAndClassifiersModelRemoteId(query.getAddress(), query.getModelId())
                 .orElse(null);
     }
 

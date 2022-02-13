@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class TrainingUpdateDTO {
-    private String classifierId;
     @SerializedName(value = "model_id", alternate = "modelId")
     private UUID modelId;
     private String address;
@@ -17,18 +16,13 @@ public class TrainingUpdateDTO {
     private boolean finished;
     private List<MetricDTO> metrics;
 
-    public TrainingUpdateDTO(String classifierId, UUID modelId, String address, int currentStep, int totalSteps, boolean finished, List<MetricDTO> metrics) {
-        this.classifierId = classifierId;
+    public TrainingUpdateDTO(UUID modelId, String address, int currentStep, int totalSteps, boolean finished, List<MetricDTO> metrics) {
         this.modelId = modelId;
         this.address = address;
         this.currentStep = currentStep;
         this.totalSteps = totalSteps;
         this.finished = finished;
         this.metrics = metrics;
-    }
-
-    public String getClassifierId() {
-        return classifierId;
     }
 
     public UUID getModelId() {
