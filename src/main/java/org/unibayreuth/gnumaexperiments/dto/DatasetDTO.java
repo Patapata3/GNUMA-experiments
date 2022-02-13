@@ -1,11 +1,9 @@
 package org.unibayreuth.gnumaexperiments.dto;
 
 import java.util.List;
-import java.util.UUID;
 
 public class DatasetDTO {
-
-    DataDTO data;
+    private DataDTO data;
 
     public DatasetDTO(DataDTO data) {
         this.data = data;
