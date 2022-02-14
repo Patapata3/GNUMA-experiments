@@ -27,7 +27,7 @@ public class ExperimentMessageSource extends SpringAMQPMessageSource {
         this.messageHandlerRepository = messageHandlerRepository;
     }
 
-    @RabbitListener(queues = "exp.queue")
+    @RabbitListener(queues = "exp.queue.dev")
     @Override
     public void onMessage(Message message, Channel channel) {
         if (!message.getMessageProperties().getHeaders().containsKey(HEADER_KEY) ||

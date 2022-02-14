@@ -2,8 +2,7 @@ package org.unibayreuth.gnumaexperiments.handlers.messagehandling.workers;
 
 import com.google.common.base.Objects;
 import org.springframework.stereotype.Component;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.Classifier;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.views.ExperimentView;
 
 import javax.annotation.Nullable;

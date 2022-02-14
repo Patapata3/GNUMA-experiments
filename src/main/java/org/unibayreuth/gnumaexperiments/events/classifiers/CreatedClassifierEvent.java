@@ -1,6 +1,6 @@
 package org.unibayreuth.gnumaexperiments.events.classifiers;
 
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParameter;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.HyperParameter;
 
 import java.util.List;
 

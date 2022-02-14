@@ -1,11 +1,11 @@
-package org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity;
+package org.unibayreuth.gnumaexperiments.dataModel.entity;
 
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.modelling.command.EntityId;
 import org.unibayreuth.gnumaexperiments.commands.experiments.UpdateExperimentCommand;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ExperimentStatus;
+import org.unibayreuth.gnumaexperiments.dataModel.enums.ExperimentStatus;
 import org.unibayreuth.gnumaexperiments.events.experiments.UpdatedExperimentEvent;
 
 import java.util.*;

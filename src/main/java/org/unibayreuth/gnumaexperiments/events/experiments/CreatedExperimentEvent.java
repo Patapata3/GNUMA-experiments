@@ -1,8 +1,8 @@
 package org.unibayreuth.gnumaexperiments.events.experiments;
 
 import org.unibayreuth.gnumaexperiments.GNUMAConstants;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataConfig;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.DataConfig;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.ExperimentClassifier;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

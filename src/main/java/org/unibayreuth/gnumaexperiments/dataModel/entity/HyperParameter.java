@@ -1,7 +1,7 @@
-package org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity;
+package org.unibayreuth.gnumaexperiments.dataModel.entity;
 
 import org.axonframework.modelling.command.EntityId;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.HyperParameterType;
+import org.unibayreuth.gnumaexperiments.dataModel.enums.HyperParameterType;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,10 +14,15 @@ public class HyperParameter {
     private boolean optional;
     private String defaultValue;
     private List<String> valueList;
+    private Double upperBound;
+    private Double lowerBound;
 
-    public HyperParameter() {}
+    public HyperParameter() {
+    }
 
-    public HyperParameter(String key, HyperParameterType type, boolean optional, String defaultValue, List<String> valueList) {
+    public HyperParameter(String key, HyperParameterType type, boolean optional, String defaultValue, List<String> valueList, Double upperBound, Double lowerBound) {
+        this.upperBound = upperBound;
+        this.lowerBound = lowerBound;
         this.id = UUID.randomUUID();
         this.key = key;
         this.type = type.getId();
@@ -49,5 +54,13 @@ public class HyperParameter {
 
     public List<String> getValueList() {
         return valueList;
+    }
+
+    public Double getUpperBound() {
+        return upperBound;
+    }
+
+    public Double getLowerBound() {
+        return lowerBound;
     }
 }

@@ -1,4 +1,4 @@
-package org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums;
+package org.unibayreuth.gnumaexperiments.dataModel.enums;
 
 public enum HyperParameterType {
     STRING("STRING"),

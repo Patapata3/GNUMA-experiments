@@ -33,12 +33,12 @@ public class RabbitConfiguration {
 
     @Bean
     public Queue queue1() {
-        return QueueBuilder.nonDurable("exp.queue").build();
+        return QueueBuilder.nonDurable("exp.queue.dev").build();
     }
 
     @Bean
     public Queue queue2() {
-        return QueueBuilder.nonDurable("exp.queue2").build();
+        return QueueBuilder.nonDurable("exp.queue2.dev").build();
     }
 
     @Bean

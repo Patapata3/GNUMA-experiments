@@ -1,6 +1,6 @@
 package org.unibayreuth.gnumaexperiments.commands.experiments;
 
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataConfig;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.DataConfig;
 import org.unibayreuth.gnumaexperiments.dto.ExperimentClassifierDTO;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package org.unibayreuth.gnumaexperiments.views;
 
 import org.springframework.data.annotation.Id;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParameter;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.HyperParameter;
 
 import java.util.List;
 
