@@ -3,6 +3,7 @@ package org.unibayreuth.gnumaexperiments.dto;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -14,6 +15,9 @@ public class TrainRequestDTO {
     private List<String> valIds;
     @SerializedName(value="model_name")
     private String modelName;
+    //TODO: implement getting label mappings from the dataset service as soon as it is finished there
+    @SerializedName(value = "label_mapping")
+    private Map<String, Integer> labelMapping = new HashMap<>();
     @SerializedName(value="hyper_parameters")
     private Map<String, String> hyperParameters;
     @SerializedName(value="dataset_id")
