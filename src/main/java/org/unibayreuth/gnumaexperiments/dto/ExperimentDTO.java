@@ -1,6 +1,6 @@
 package org.unibayreuth.gnumaexperiments.dto;
 
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataConfig;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.DataConfig;
 
 import java.util.List;
 import java.util.UUID;

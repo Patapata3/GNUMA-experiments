@@ -1,7 +1,7 @@
 package org.unibayreuth.gnumaexperiments.commands.classifiers;
 
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParameter;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.HyperParameter;
 
 import java.util.List;
 import java.util.Objects;

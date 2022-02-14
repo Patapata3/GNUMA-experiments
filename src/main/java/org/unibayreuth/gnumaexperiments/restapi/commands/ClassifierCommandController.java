@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.CreateClassifierCommand;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.DeleteClassifierCommand;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParameter;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.HyperParameter;
 import org.unibayreuth.gnumaexperiments.dto.ClassifierDTO;
 import org.unibayreuth.gnumaexperiments.service.DTOConverterService;
 

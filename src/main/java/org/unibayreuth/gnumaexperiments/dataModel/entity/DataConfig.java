@@ -1,4 +1,4 @@
-package org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity;
+package org.unibayreuth.gnumaexperiments.dataModel.entity;
 
 import org.axonframework.modelling.command.EntityId;
 

@@ -1,7 +1,6 @@
 package org.unibayreuth.gnumaexperiments.service;
 
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParameter;
-import org.unibayreuth.gnumaexperiments.dto.ExperimentClassifierDTO;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.HyperParameter;
 import org.unibayreuth.gnumaexperiments.exceptions.ExperimentValidationException;
 
 import java.util.List;

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.CreateClassifierCommand;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.UpdateClassifierCommand;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParameter;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.HyperParameter;
 import org.unibayreuth.gnumaexperiments.dto.ClassifierDTO;
 import org.unibayreuth.gnumaexperiments.handlers.messagehandling.MessageHandler;
 import org.unibayreuth.gnumaexperiments.queries.classifiers.RetrieveAddressClassifiersQuery;

@@ -1,7 +1,7 @@
 package org.unibayreuth.gnumaexperiments.service;
 
 import org.springframework.stereotype.Service;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParameter;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.HyperParameter;
 import org.unibayreuth.gnumaexperiments.dto.HyperParameterDTO;
 
 import java.util.ArrayList;
@@ -22,6 +22,6 @@ public class DTOConverterServiceBean implements DTOConverterService {
 
     private HyperParameter createHyperParameterFromDTO(HyperParameterDTO hyperParameterDTO) {
         return new HyperParameter(hyperParameterDTO.getKey(), hyperParameterDTO.getType(), hyperParameterDTO.isOptional(),
-                hyperParameterDTO.getDefaultValue(), hyperParameterDTO.getValueList());
+                hyperParameterDTO.getDefaultValue(), hyperParameterDTO.getValueList(), hyperParameterDTO.getUpperBound(), hyperParameterDTO.getLowerBound());
     }
 }

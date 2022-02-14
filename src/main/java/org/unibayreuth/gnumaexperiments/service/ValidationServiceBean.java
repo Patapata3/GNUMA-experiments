@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.HyperParameter;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.HyperParameterType;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.HyperParameter;
+import org.unibayreuth.gnumaexperiments.dataModel.enums.HyperParameterType;
 import org.unibayreuth.gnumaexperiments.exceptions.ExperimentValidationException;
 
 import java.util.*;

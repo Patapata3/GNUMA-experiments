@@ -1,7 +1,7 @@
 package org.unibayreuth.gnumaexperiments.commands.experiments;
 
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.DataConfig;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.entity.ExperimentClassifier;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.DataConfig;
+import org.unibayreuth.gnumaexperiments.dataModel.entity.ExperimentClassifier;
 
 import java.util.List;
 import java.util.UUID;

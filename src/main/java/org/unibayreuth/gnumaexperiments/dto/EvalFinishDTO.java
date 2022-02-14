@@ -1,10 +1,9 @@
 package org.unibayreuth.gnumaexperiments.dto;
 
 import com.google.gson.annotations.SerializedName;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.enums.ResultSourceType;
+import org.unibayreuth.gnumaexperiments.dataModel.enums.ResultSourceType;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class EvalFinishDTO {
