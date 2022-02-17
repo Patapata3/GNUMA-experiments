@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class TrainRequestDTO {
     @SerializedName(value="train_ids")
@@ -21,9 +20,9 @@ public class TrainRequestDTO {
     @SerializedName(value="hyper_parameters")
     private Map<String, String> hyperParameters;
     @SerializedName(value="dataset_id")
-    private UUID datasetId;
+    private String datasetId;
 
-    public TrainRequestDTO(List<String> trainIds, List<String> valIds, String modelName, Map<String, String> hyperParameters, UUID datasetId) {
+    public TrainRequestDTO(List<String> trainIds, List<String> valIds, String modelName, Map<String, String> hyperParameters, String datasetId) {
         this.trainIds = trainIds;
         this.valIds = valIds;
         this.modelName = modelName;
@@ -43,7 +42,7 @@ public class TrainRequestDTO {
         return modelName;
     }
 
-    public UUID getDatasetId() {
+    public String getDatasetId() {
         return datasetId;
     }
 

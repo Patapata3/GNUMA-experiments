@@ -2,8 +2,6 @@ package org.unibayreuth.gnumaexperiments.configuration;
 
 import com.mongodb.client.MongoClient;
 import com.rabbitmq.client.Channel;
-import org.axonframework.commandhandling.CommandBus;
-import org.axonframework.commandhandling.SimpleCommandBus;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -19,7 +17,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.unibayreuth.gnumaexperiments.handlers.exceptionhandling.ExceptionWrappingHandlerInterceptor;
 
 @Configuration
 public class RabbitConfiguration {
