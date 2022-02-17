@@ -6,8 +6,11 @@ import org.axonframework.queryhandling.QueryGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.unibayreuth.gnumaexperiments.GNUMAConstants;
 import org.unibayreuth.gnumaexperiments.commands.experiments.UpdateExperimentCommand;
 import org.unibayreuth.gnumaexperiments.dataModel.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.dataModel.enums.ExperimentStatus;
@@ -42,11 +45,16 @@ public class TrainingUpdateHandler implements MessageHandler {
     private RequestSenderServiceBean requestSenderService;
     @Autowired
     private ExperimentWorker experimentWorker;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public String getType() {
         return TYPE;
     }
+
+    @Value("${axon.amqp.exchange}")
+    private String exchange;
 
     @Override
     public void handle(Message message) {
@@ -77,8 +85,14 @@ public class TrainingUpdateHandler implements MessageHandler {
                 experimentUpdate.getMetrics()
                         .stream()
                         .collect(Collectors.toMap(MetricDTO::getKey, MetricDTO::getValue));
-        commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), runningClassifier.getId(), newStatus,
-                newResults, experimentUpdate.getCurrentStep(), experimentUpdate.getTotalSteps()));
+        var updateCommand = new UpdateExperimentCommand(runningExperiment.getId(), runningClassifier.getId(), newStatus,
+                newResults, experimentUpdate.getCurrentStep(), experimentUpdate.getTotalSteps());
+
+        commandGateway.send(updateCommand);
+        rabbitTemplate.convertAndSend(exchange, GNUMAConstants.ROUTING_KEY, updateCommand, m -> {
+            m.getMessageProperties().setHeader("event", "ExperimentTrainingUpdate");
+            return m;
+        });
 
         if (newStatus == ExperimentStatus.TEST) {
             try {
