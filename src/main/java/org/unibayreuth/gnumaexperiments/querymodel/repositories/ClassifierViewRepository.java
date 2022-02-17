@@ -12,4 +12,5 @@ public interface ClassifierViewRepository extends MongoRepository<ClassifierView
     Optional<ClassifierView> findByAddress(@NonNull String address);
     @NonNull
     List<ClassifierView> findAllByAddressIn(@NonNull List<String> addresses);
+    void deleteByAddress(String address);
 }

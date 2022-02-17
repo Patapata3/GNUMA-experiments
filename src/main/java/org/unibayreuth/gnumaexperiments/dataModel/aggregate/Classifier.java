@@ -1,6 +1,8 @@
 package org.unibayreuth.gnumaexperiments.dataModel.aggregate;
 
+import com.google.common.base.Strings;
 import org.axonframework.modelling.command.AggregateMember;
+import org.springframework.util.CollectionUtils;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.CreateClassifierCommand;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.DeleteClassifierCommand;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.UpdateClassifierCommand;
@@ -15,6 +17,7 @@ import org.unibayreuth.gnumaexperiments.events.classifiers.DeletedClassifierEven
 import org.unibayreuth.gnumaexperiments.events.classifiers.UpdatedClassifierEvent;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,9 +25,10 @@ import static org.axonframework.modelling.command.AggregateLifecycle.markDeleted
 
 @Aggregate
 public class Classifier {
-    @AggregateIdentifier
     private String id;
+    @AggregateIdentifier
     private String address;
+    private Date lastUpdate;
     @AggregateMember
     private List<HyperParameter> hyperParameters;
 
@@ -49,6 +53,7 @@ public class Classifier {
     public void handle(CreatedClassifierEvent event) {
         id = event.getId();
         address = event.getAddress();
+        lastUpdate = new Date();
         this.hyperParameters = Objects.isNull(event.getHyperParameters()) ? new ArrayList<>() : event.getHyperParameters();
     }
 
@@ -59,7 +64,8 @@ public class Classifier {
 
     @EventSourcingHandler
     public void handle(UpdatedClassifierEvent event) {
-        address = event.getAddress();
+        id = event.getId();
         hyperParameters = event.getHyperParameters();
+        lastUpdate = new Date();
     }
 }

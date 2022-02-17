@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.unibayreuth.gnumaexperiments.events.classifiers.UpdatedClassifierEvent;
 import org.unibayreuth.gnumaexperiments.queries.classifiers.RetrieveAddressListClassifierQuery;
+import org.unibayreuth.gnumaexperiments.util.DateUtils;
 import org.unibayreuth.gnumaexperiments.views.ClassifierView;
 import org.unibayreuth.gnumaexperiments.events.classifiers.CreatedClassifierEvent;
 import org.unibayreuth.gnumaexperiments.events.classifiers.DeletedClassifierEvent;
@@ -14,8 +15,9 @@ import org.unibayreuth.gnumaexperiments.queries.classifiers.RetrieveAllClassifie
 import org.unibayreuth.gnumaexperiments.queries.classifiers.RetrieveIdClassifierQuery;
 import org.unibayreuth.gnumaexperiments.querymodel.repositories.ClassifierViewRepository;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class ClassifierProjector {
@@ -24,27 +26,31 @@ public class ClassifierProjector {
 
     @EventHandler
     public void handle(CreatedClassifierEvent event) {
-        ClassifierView view = new ClassifierView(event.getId(), event.getAddress(), event.getHyperParameters());
+        ClassifierView view = new ClassifierView(event.getId(), event.getAddress(), event.getHyperParameters(), new Date());
         classifierViewRepository.save(view);
     }
 
     @EventHandler
     public void handle(DeletedClassifierEvent event) {
-        classifierViewRepository.deleteById(event.getId());
+        classifierViewRepository.deleteByAddress(event.getAddress());
     }
 
     @EventHandler
     public void handle(UpdatedClassifierEvent event) {
-        classifierViewRepository.findById(event.getId()).ifPresent(classifier -> {
-            classifier.setAddress(event.getAddress());
+        classifierViewRepository.findByAddress(event.getAddress()).ifPresent(classifier -> {
+            classifier.setId(event.getId());
             classifier.setHyperParameters(event.getHyperParameters());
+            classifier.setLastUpdate(new Date());
             classifierViewRepository.save(classifier);
         });
     }
 
     @QueryHandler
     public List<ClassifierView> handle(RetrieveAllClassifiersQuery query) {
-        return classifierViewRepository.findAll();
+        return classifierViewRepository.findAll().stream()
+                .filter(classifier -> classifier.getLastUpdate() != null &&
+                        DateUtils.secondsBetween(classifier.getLastUpdate(), new Date()) <= 60)
+                .collect(Collectors.toList());
     }
 
     @QueryHandler

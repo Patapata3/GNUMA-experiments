@@ -3,21 +3,24 @@ package org.unibayreuth.gnumaexperiments.views;
 import org.springframework.data.annotation.Id;
 import org.unibayreuth.gnumaexperiments.dataModel.entity.HyperParameter;
 
+import java.util.Date;
 import java.util.List;
 
 public class ClassifierView {
-    @Id
     private String id;
+    @Id
     private String address;
     private List<HyperParameter> hyperParameters;
+    private Date lastUpdate;
 
     public ClassifierView() {
     }
 
-    public ClassifierView(String id, String address, List<HyperParameter> hyperParameters) {
+    public ClassifierView(String id, String address, List<HyperParameter> hyperParameters, Date lastUpdate) {
         this.id = id;
         this.address = address;
         this.hyperParameters = hyperParameters;
+        this.lastUpdate = lastUpdate;
     }
 
     public String getId() {
@@ -42,6 +45,14 @@ public class ClassifierView {
 
     public void setHyperParameters(List<HyperParameter> hyperParameters) {
         this.hyperParameters = hyperParameters;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override

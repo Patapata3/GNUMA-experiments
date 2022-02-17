@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class UpdateClassifierCommand {
-    @TargetAggregateIdentifier
     private String id;
+    @TargetAggregateIdentifier
     private String address;
     private List<HyperParameter> hyperParameters;
 
