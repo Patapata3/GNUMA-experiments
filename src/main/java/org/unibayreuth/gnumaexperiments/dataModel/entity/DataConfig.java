@@ -7,14 +7,14 @@ import java.util.UUID;
 public class DataConfig {
     @EntityId
     private UUID id;
-    private UUID datasetId;
+    private String datasetId;
     private String name;
     private Double testSplit;
     private Double validationSplit;
     private Integer seed;
     private DataSplit dataSplit;
 
-    public DataConfig(UUID id, UUID datasetId, String name, Double testSplit, Double validationSplit, Integer seed, DataSplit dataSplit) {
+    public DataConfig(UUID id, String datasetId, String name, Double testSplit, Double validationSplit, Integer seed, DataSplit dataSplit) {
         this.id = id;
         this.datasetId = datasetId;
         this.name = name;
@@ -32,11 +32,11 @@ public class DataConfig {
         this.id = id;
     }
 
-    public UUID getDatasetId() {
+    public String getDatasetId() {
         return datasetId;
     }
 
-    public void setDatasetId(UUID datasetId) {
+    public void setDatasetId(String datasetId) {
         this.datasetId = datasetId;
     }
 
