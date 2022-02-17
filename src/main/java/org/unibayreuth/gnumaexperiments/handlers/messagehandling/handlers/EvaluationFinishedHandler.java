@@ -6,8 +6,11 @@ import org.axonframework.queryhandling.QueryGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.unibayreuth.gnumaexperiments.GNUMAConstants;
 import org.unibayreuth.gnumaexperiments.commands.experiments.UpdateExperimentCommand;
 import org.unibayreuth.gnumaexperiments.dataModel.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.dataModel.enums.ExperimentStatus;
@@ -35,6 +38,11 @@ public class EvaluationFinishedHandler implements MessageHandler {
     private QueryGateway queryGateway;
     @Autowired
     private ExperimentWorker experimentWorker;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Value("${axon.amqp.exchange}")
+    private String exchange;
 
     @Override
     public String getType() {
@@ -73,8 +81,14 @@ public class EvaluationFinishedHandler implements MessageHandler {
                                 HashMap::putAll);
 
         log(log::debug, "Updating experiment after evaluation was finished");
-        commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), runningClassifier.getId(), ExperimentStatus.FINISH, testResultMap,
-                evalFinishDTO.getResultSourceId(), evalFinishDTO.getResultSourceType()));
+        var updateCommand = new UpdateExperimentCommand(runningExperiment.getId(), runningClassifier.getId(), ExperimentStatus.FINISH, testResultMap,
+                evalFinishDTO.getResultSourceId(), evalFinishDTO.getResultSourceType());
+        commandGateway.send(updateCommand);
+        rabbitTemplate.convertAndSend(exchange, GNUMAConstants.ROUTING_KEY, updateCommand, m -> {
+            m.getMessageProperties().setHeader("event", "ExperimentTestFinish");
+            return m;
+        });
+
         log(log::info, "Experiment successfully finished");
     }
 }
