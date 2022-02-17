@@ -1,20 +1,20 @@
 package org.unibayreuth.gnumaexperiments.events.classifiers;
 
 public class DeletedClassifierEvent {
-    private final String id;
+    private final String address;
 
-    public DeletedClassifierEvent(String id) {
-        this.id = id;
+    public DeletedClassifierEvent(String address) {
+        this.address = address;
     }
 
-    public String getId() {
-        return id;
+    public String getAddress() {
+        return address;
     }
 
     @Override
     public String toString() {
         return "DeletedClassifierEvent{" +
-                "id='" + id + '\'' +
+                "address='" + address + '\'' +
                 '}';
     }
 }

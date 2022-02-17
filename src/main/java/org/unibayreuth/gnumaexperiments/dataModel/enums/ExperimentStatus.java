@@ -3,7 +3,9 @@ package org.unibayreuth.gnumaexperiments.dataModel.enums;
 public enum ExperimentStatus {
     TRAIN("TRAIN"),
     PAUSE("PAUSE"),
+    PAUSING("PAUSING"),
     STOP("STOP"),
+    STOPPING("STOPPING"),
     TEST("TEST"),
     FINISH("FINISH"),
     ERROR("ERROR");

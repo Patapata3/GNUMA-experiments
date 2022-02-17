@@ -113,8 +113,8 @@ public class ExperimentCommandHandler {
                 log(log::info, String.format("Sending request to classifier {%s} by address {%s} to pause a model {%s}", classifierId, address, modelId));
                 requestSenderService.sendPutRequest(String.format("%s/pause/%s", address, modelId), null);
                 log(log::info, "Sending command to update the experiment");
-                commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), classifier.getId(), ExperimentStatus.PAUSE, new HashMap<>()));
-                log(log::info, String.format("Experiment {%s} Classifier {%s} is paused", runningExperiment.getId(), classifierId));
+                commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), classifier.getId(), ExperimentStatus.PAUSING, new HashMap<>()));
+                log(log::info, String.format("Experiment {%s} Classifier {%s} is pausing", runningExperiment.getId(), classifierId));
             } catch (ServiceRequestException | InterruptedException | IOException e) {
                 log(log::error, e.getMessage(), e);
             }
@@ -144,8 +144,8 @@ public class ExperimentCommandHandler {
                 log(log::info, String.format("Sending request to classifier {%s} by address {%s} to interrupt a model {%s}", classifierId, address, modelId));
                 requestSenderService.sendDeleteRequest(String.format("%s/interrupt/%s", classifier.getAddress(), modelId));
                 log(log::info, "Sending command to update the experiment");
-                commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), classifier.getId(), ExperimentStatus.STOP, new HashMap<>()));
-                log(log::info, String.format("Experiment {%s} Classifier {%s} is stopped", runningExperiment.getId(), classifierId));
+                commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), classifier.getId(), ExperimentStatus.STOPPING, new HashMap<>()));
+                log(log::info, String.format("Experiment {%s} Classifier {%s} is stopping", runningExperiment.getId(), classifierId));
             } catch (ServiceRequestException | InterruptedException | IOException e) {
                 log(log::error, e.getMessage(), e);
             }

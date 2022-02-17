@@ -45,12 +45,13 @@ public class ExperimentClassifier {
     public void handle(UpdatedExperimentEvent event) {
         if (!Objects.isNull(event.getNewResults())) {
             if (getStatus() == ExperimentStatus.TRAIN) {
-                event.getNewResults().forEach((key, value) -> {
-                    if (!trainResults.containsKey(key)) {
-                        trainResults.put(key, new ArrayList<>());
-                    }
-                    trainResults.get(key).add(value);
-                });
+                ofNullable(event.getNewResults())
+                        .ifPresent(results -> results.forEach((key, value) -> {
+                            if (!trainResults.containsKey(key)) {
+                                trainResults.put(key, new ArrayList<>());
+                            }
+                            trainResults.get(key).add(value);
+                        }));
             } else {
                 testResults.putAll(event.getNewResults());
             }

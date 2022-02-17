@@ -26,17 +26,18 @@ public class UpdateExperimentCommand {
     }
 
     public UpdateExperimentCommand(UUID id, UUID experimentClassifierId, ExperimentStatus status, Map<String, Double> newResults) {
-        this.id = id;
-        this.experimentClassifierId = experimentClassifierId;
-        this.status = status;
+        this(id, experimentClassifierId, status);
         this.newResults = newResults;
     }
 
-    public UpdateExperimentCommand(UUID id, UUID experimentClassifierId, ExperimentStatus status, Map<String, Double> newResults, UUID resultSourceId, ResultSourceType resultSourceType) {
+    public UpdateExperimentCommand(UUID id, UUID experimentClassifierId, ExperimentStatus status) {
         this.id = id;
         this.experimentClassifierId = experimentClassifierId;
         this.status = status;
-        this.newResults = newResults;
+    }
+
+    public UpdateExperimentCommand(UUID id, UUID experimentClassifierId, ExperimentStatus status, Map<String, Double> newResults, UUID resultSourceId, ResultSourceType resultSourceType) {
+        this(id, experimentClassifierId, status, newResults);
         this.resultSourceId = resultSourceId;
         this.resultSourceType = resultSourceType;
     }

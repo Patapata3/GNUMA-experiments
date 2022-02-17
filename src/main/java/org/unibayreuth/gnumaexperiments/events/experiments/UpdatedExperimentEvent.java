@@ -3,6 +3,7 @@ package org.unibayreuth.gnumaexperiments.events.experiments;
 import org.unibayreuth.gnumaexperiments.dataModel.enums.ExperimentStatus;
 import org.unibayreuth.gnumaexperiments.dataModel.enums.ResultSourceType;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 

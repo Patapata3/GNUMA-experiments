@@ -72,12 +72,13 @@ public class ExperimentProjector {
     private void writeResults(@NonNull ExperimentClassifier classifier, @NonNull UpdatedExperimentEvent event) {
         if (classifier.getStatus() == ExperimentStatus.TRAIN) {
             var currentResultMap = classifier.getTrainResults();
-            event.getNewResults().forEach((key, value) -> {
-                if (!currentResultMap.containsKey(key)) {
-                    currentResultMap.put(key, new ArrayList<>());
-                }
-                currentResultMap.get(key).add(value);
-            });
+            ofNullable(event.getNewResults())
+                    .ifPresent(results ->  results.forEach((key, value) -> {
+                        if (!currentResultMap.containsKey(key)) {
+                            currentResultMap.put(key, new ArrayList<>());
+                        }
+                        currentResultMap.get(key).add(value);
+                    }));
         } else {
             classifier.getTestResults().putAll(event.getNewResults());
         }
