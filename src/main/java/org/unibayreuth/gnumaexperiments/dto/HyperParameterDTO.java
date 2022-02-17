@@ -6,6 +6,7 @@ import org.unibayreuth.gnumaexperiments.dataModel.enums.HyperParameterType;
 import java.util.List;
 
 public class HyperParameterDTO {
+    @SerializedName(value="name", alternate = "key")
     private String key;
     private HyperParameterType type;
     private boolean optional;
