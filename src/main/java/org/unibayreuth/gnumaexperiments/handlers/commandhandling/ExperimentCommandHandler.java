@@ -161,7 +161,9 @@ public class ExperimentCommandHandler {
                 UUID modelId = classifier.getModel().getRemoteId();
                 String address = classifier.getAddress();
                 log(log::info, String.format("Sending request to classifier {%s} by address {%s} to interrupt a model {%s}", classifierId, address, modelId));
-                requestSenderService.sendDeleteRequest(String.format("%s/interrupt/%s", classifier.getAddress(), modelId));
+                requestSenderService.sendDeleteRequest(String.format("%s/%s/%s", classifier.getAddress(),
+                        classifier.getStatus() == ExperimentStatus.PAUSE ? "models" : "interrupt", modelId));
+
                 log(log::info, "Sending command to update the experiment");
                 commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), classifier.getId(), ExperimentStatus.STOPPING, new HashMap<>()));
                 log(log::info, String.format("Experiment {%s} Classifier {%s} is stopping", runningExperiment.getId(), classifierId));
