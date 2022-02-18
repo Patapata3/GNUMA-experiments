@@ -89,7 +89,7 @@ public class TrainingUpdateHandler implements MessageHandler {
                 newResults, experimentUpdate.getCurrentStep(), experimentUpdate.getTotalSteps());
 
         commandGateway.send(updateCommand);
-        rabbitTemplate.convertAndSend(exchange, GNUMAConstants.ROUTING_KEY, updateCommand, m -> {
+        rabbitTemplate.convertAndSend(exchange, GNUMAConstants.ROUTING_KEY, gson.toJson(updateCommand), m -> {
             m.getMessageProperties().setHeader("event", "ExperimentTrainingUpdate");
             return m;
         });

@@ -84,7 +84,7 @@ public class EvaluationFinishedHandler implements MessageHandler {
         var updateCommand = new UpdateExperimentCommand(runningExperiment.getId(), runningClassifier.getId(), ExperimentStatus.FINISH, testResultMap,
                 evalFinishDTO.getResultSourceId(), evalFinishDTO.getResultSourceType());
         commandGateway.send(updateCommand);
-        rabbitTemplate.convertAndSend(exchange, GNUMAConstants.ROUTING_KEY, updateCommand, m -> {
+        rabbitTemplate.convertAndSend(exchange, GNUMAConstants.ROUTING_KEY, new Gson().toJson(updateCommand), m -> {
             m.getMessageProperties().setHeader("event", "ExperimentTestFinish");
             return m;
         });
