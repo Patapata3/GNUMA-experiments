@@ -165,7 +165,8 @@ public class ExperimentCommandHandler {
                         classifier.getStatus() == ExperimentStatus.PAUSE ? "models" : "interrupt", modelId));
 
                 log(log::info, "Sending command to update the experiment");
-                commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), classifier.getId(), ExperimentStatus.STOPPING, new HashMap<>()));
+                commandGateway.send(new UpdateExperimentCommand(runningExperiment.getId(), classifier.getId(),
+                        classifier.getStatus() == ExperimentStatus.PAUSE ? ExperimentStatus.STOP : ExperimentStatus.STOPPING, new HashMap<>()));
                 log(log::info, String.format("Experiment {%s} Classifier {%s} is stopping", runningExperiment.getId(), classifierId));
             } catch (ServiceRequestException | InterruptedException | IOException e) {
                 log(log::error, e.getMessage(), e);

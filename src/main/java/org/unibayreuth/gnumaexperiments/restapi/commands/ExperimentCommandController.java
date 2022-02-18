@@ -87,7 +87,7 @@ public class ExperimentCommandController {
         Map<ExperimentErrorCode, String> reasonMap = Map.of(
                 ExperimentErrorCode.ENTITY_NOT_FOUND, "a missing entity",
                 ExperimentErrorCode.VALIDATION_ERROR, "validation constraints",
-                ExperimentErrorCode.REQUEST_ERROR, "failed request to a classifier",
+                ExperimentErrorCode.REQUEST_ERROR, "failed request to a service",
                 ExperimentErrorCode.UNKNOWN, "unknown exception"
         );
 
