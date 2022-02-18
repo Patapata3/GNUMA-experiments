@@ -93,7 +93,7 @@ public class TrainingUpdateHandler implements MessageHandler {
         if (newStatus == ExperimentStatus.TEST) {
             try {
                 requestSenderService.sendPostRequest(String.format("%s/evaluate/%s", runningClassifier.getAddress(), experimentUpdate.getModelId()),
-                        String.format("{doc_ids: %s}", gson.toJson(runningExperiment.getData().getDataSplit().getTestData())));
+                        String.format("{\"doc_ids\": %s}", gson.toJson(runningExperiment.getData().getDataSplit().getTestData())));
             } catch (IOException | InterruptedException | ServiceRequestException e) {
                 log(log::error, e.getMessage(), e);
             }
