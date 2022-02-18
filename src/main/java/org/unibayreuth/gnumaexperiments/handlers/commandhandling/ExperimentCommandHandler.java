@@ -56,6 +56,19 @@ public class ExperimentCommandHandler {
     @Value("${dataset.service.address}")
     private String datasetServiceAddress;
 
+    /**
+     * Handle a command to start a new experiment. Before creating an experiment the hyper parameter values are validated,
+     * dateset with the given split is fetched, and a request to the classifier is sent.
+     * If request to one of the classifiers is not successful, this classifier gets put into error status within this
+     * experiment. All of the other classifiers will tun normally
+     *
+     * @param cmd - command object, containing data relevant to the new experiment
+     * @throws MissingEntityException - classifier to run an experiment on does not exist
+     * @throws ExperimentValidationException - invalid hyper parameters
+     * @throws IOException - malformed or incorrect uri of the dataset service
+     * @throws InterruptedException - connection to the dataset service was interrupted
+     * @throws ServiceRequestException - dataset service returned non-ok response
+     */
     @CommandHandler
     public void handle(StartExperimentCommand cmd) throws MissingEntityException, ExperimentValidationException, IOException, InterruptedException, ServiceRequestException {
         log(log::info, "Handling command to start an experiment");
@@ -80,7 +93,7 @@ public class ExperimentCommandHandler {
 
         log(log::info, "Collecting split data from the dataset service");
         DataConfig data = cmd.getData();
-        String url = RequestUtils.constructUrlWithParameters(datasetServiceAddress, String.format("/dataset/%s", data.getDatasetId()),
+        String url = RequestUtils.constructUrlWithParameters(datasetServiceAddress, String.format("/datasets/%s", data.getDatasetId()),
                 Map.of("validationSplit", data.getValidationSplit().toString(), "testSplit", data.getTestSplit().toString(), "seed", data.getSeed().toString()));
         DatasetDTO splitDataset = new Gson().fromJson(requestSenderService.sendGetRequest(url).body(), DatasetDTO.class);
         data.setDataSplit(new DataSplit(UUID.randomUUID(), splitDataset.getData().getFolds().get(0).getTrain(), splitDataset.getData().getFolds().get(0).getValid(), splitDataset.getData().getTest()));
@@ -91,6 +104,12 @@ public class ExperimentCommandHandler {
         log(log::info, "New experiment successfully created");
     }
 
+    /**
+     * Handling of a command to pause given classifiers within an experiment
+     * @param cmd - object containing id of the experiment and classifiers to be paused
+     * @throws MissingEntityException - given experiment or classifier does not exist
+     * @throws ExperimentValidationException - all of the given classifiers are not in the training state
+     */
     @CommandHandler
     public void handle(PauseExperimentCommand cmd) throws MissingEntityException, ExperimentValidationException {
         log(log::info, String.format("Received command to pause an experiment with id {%s}", cmd.getId()));
