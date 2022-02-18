@@ -89,10 +89,6 @@ public class TrainingUpdateHandler implements MessageHandler {
                 newResults, experimentUpdate.getCurrentStep(), experimentUpdate.getTotalSteps());
 
         commandGateway.send(updateCommand);
-        rabbitTemplate.convertAndSend(exchange, GNUMAConstants.ROUTING_KEY, gson.toJson(updateCommand), m -> {
-            m.getMessageProperties().setHeader("event", "ExperimentTrainingUpdate");
-            return m;
-        });
 
         if (newStatus == ExperimentStatus.TEST) {
             try {
@@ -102,5 +98,12 @@ public class TrainingUpdateHandler implements MessageHandler {
                 log(log::error, e.getMessage(), e);
             }
         }
+
+        rabbitTemplate.convertAndSend(exchange, GNUMAConstants.ROUTING_KEY, gson.toJson(updateCommand), m -> {
+            m.getMessageProperties().setHeader("event", "ExperimentTrainingUpdate");
+            return m;
+        });
+
+        log(log::info, "Experiment successfully updated");
     }
 }
