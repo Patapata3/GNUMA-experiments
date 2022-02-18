@@ -79,7 +79,7 @@ public class ExperimentProjector {
                         }
                         currentResultMap.get(key).add(value);
                     }));
-        } else {
+        } else if (event.getNewResults() != null) {
             classifier.getTestResults().putAll(event.getNewResults());
         }
         classifier.setStatus(event.getStatus());
