@@ -30,12 +30,12 @@ public class RabbitConfiguration {
 
     @Bean
     public Queue queue1() {
-        return QueueBuilder.nonDurable("exp.queue").build();
+        return QueueBuilder.nonDurable("exp.queue.test").build();
     }
 
     @Bean
     public Queue queue2() {
-        return QueueBuilder.nonDurable("exp.queue2").build();
+        return QueueBuilder.nonDurable("exp.queue2.test").build();
     }
 
     @Bean
@@ -52,7 +52,7 @@ public class RabbitConfiguration {
     public SpringAMQPMessageSource myMessageSource(AMQPMessageConverter messageConverter) {
         return new SpringAMQPMessageSource(messageConverter) {
 
-            @RabbitListener(queues = "exp.queue2")
+            @RabbitListener(queues = "exp.queue2.test")
             @Override
             public void onMessage(Message message, Channel channel) {
                 JSONObject messageBody = new JSONObject(new String(message.getBody()));
