@@ -72,12 +72,11 @@ public class EvaluationFinishedHandler implements MessageHandler {
             return;
         }
 
-        log(log::debug, "Adding prefix \"test\" to result keys");
         Map<String, Double> testResultMap = Objects.isNull(evalFinishDTO.getMetrics()) ? new HashMap<>() :
                 evalFinishDTO.getMetrics()
                         .stream()
                         .collect(HashMap::new,
-                                (map, metric) -> map.put("test_" + metric.getKey(), metric.getValue()),
+                                (map, metric) -> map.put(metric.getKey(), metric.getValue()),
                                 HashMap::putAll);
 
         log(log::debug, "Updating experiment after evaluation was finished");
