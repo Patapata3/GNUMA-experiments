@@ -1,10 +1,12 @@
 package org.unibayreuth.gnumaexperiments.querymodel.projectors;
 
+import com.google.common.collect.Sets;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import org.unibayreuth.gnumaexperiments.dataModel.aggregate.Experiment;
 import org.unibayreuth.gnumaexperiments.dataModel.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.dataModel.enums.ExperimentStatus;
 import org.unibayreuth.gnumaexperiments.events.experiments.CreatedExperimentEvent;
@@ -70,7 +72,7 @@ public class ExperimentProjector {
     }
 
     private void writeResults(@NonNull ExperimentClassifier classifier, @NonNull UpdatedExperimentEvent event) {
-        if (classifier.getStatus() == ExperimentStatus.TRAIN) {
+        if (Sets.newHashSet(ExperimentStatus.TRAIN, ExperimentStatus.PAUSING, ExperimentStatus.STOPPING).contains(classifier.getStatus())) {
             var currentResultMap = classifier.getTrainResults();
             ofNullable(event.getNewResults())
                     .ifPresent(results ->  results.forEach((key, value) -> {
