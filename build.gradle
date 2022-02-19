@@ -49,10 +49,6 @@ test {
     useJUnitPlatform()
 }
 
-bootJar {
-    archiveClassifier.set('boot')
-}
-
 jar {
-    archiveClassifier.set('')
+    enabled = false;
 }
