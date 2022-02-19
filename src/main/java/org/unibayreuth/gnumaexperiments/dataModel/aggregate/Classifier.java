@@ -1,8 +1,6 @@
 package org.unibayreuth.gnumaexperiments.dataModel.aggregate;
 
-import com.google.common.base.Strings;
 import org.axonframework.modelling.command.AggregateMember;
-import org.springframework.util.CollectionUtils;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.CreateClassifierCommand;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.DeleteClassifierCommand;
 import org.unibayreuth.gnumaexperiments.commands.classifiers.UpdateClassifierCommand;
@@ -23,7 +21,7 @@ import java.util.Objects;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.markDeleted;
 
-@Aggregate
+@Aggregate(snapshotTriggerDefinition = "classifierSnapshotTriggerDefinition")
 public class Classifier {
     private String id;
     @AggregateIdentifier

@@ -2,6 +2,9 @@ package org.unibayreuth.gnumaexperiments.configuration;
 
 import com.mongodb.client.MongoClient;
 import com.rabbitmq.client.Channel;
+import org.axonframework.eventsourcing.EventCountSnapshotTriggerDefinition;
+import org.axonframework.eventsourcing.SnapshotTriggerDefinition;
+import org.axonframework.eventsourcing.Snapshotter;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -67,6 +70,14 @@ public class RabbitConfiguration {
                 .storageEngine(storageEngine)
                 .messageMonitor(configuration.messageMonitor(EventStore.class, "experimentEventStore"))
                 .build();
+    }
+
+    @Bean
+    public SnapshotTriggerDefinition classifierSnapshotTriggerDefinition(
+            Snapshotter snapshotter,
+            @Value("${axon.aggregate.order.snapshot-threshold:250}") int threshold
+    ) {
+        return new EventCountSnapshotTriggerDefinition(snapshotter, threshold);
     }
 
     @Bean
