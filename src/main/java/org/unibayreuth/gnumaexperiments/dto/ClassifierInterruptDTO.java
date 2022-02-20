@@ -8,6 +8,7 @@ public class ClassifierInterruptDTO {
     private String address;
     @SerializedName(value = "model_id")
     private UUID modelId;
+    @SerializedName(value = "paused", alternate = "pause")
     private boolean pause;
 
     public ClassifierInterruptDTO(String address, UUID modelId, boolean pause) {
