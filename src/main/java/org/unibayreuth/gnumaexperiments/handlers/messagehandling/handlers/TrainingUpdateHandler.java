@@ -80,7 +80,7 @@ public class TrainingUpdateHandler implements MessageHandler {
             return;
         }
 
-        ExperimentStatus newStatus = experimentUpdate.isFinished() ? ExperimentStatus.TEST : ExperimentStatus.TRAIN;
+        ExperimentStatus newStatus = experimentUpdate.isFinished() ? ExperimentStatus.TEST : runningClassifier.getStatus();
         Map<String, Double> newResults = Objects.isNull(experimentUpdate.getMetrics()) ? new HashMap<>() :
                 experimentUpdate.getMetrics()
                         .stream()
