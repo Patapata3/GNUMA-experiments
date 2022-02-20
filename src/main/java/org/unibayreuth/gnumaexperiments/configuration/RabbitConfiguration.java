@@ -73,9 +73,9 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public SnapshotTriggerDefinition classifierSnapshotTriggerDefinition(
+    public SnapshotTriggerDefinition experimentSnapshotTriggerDefinition(
             Snapshotter snapshotter,
-            @Value("${axon.aggregate.order.snapshot-threshold:100}") int threshold
+            @Value("${axon.aggregate.order.snapshot-threshold:50}") int threshold
     ) {
         return new EventCountSnapshotTriggerDefinition(snapshotter, threshold);
     }

@@ -21,7 +21,7 @@ import java.util.Objects;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.markDeleted;
 
-@Aggregate(snapshotTriggerDefinition = "classifierSnapshotTriggerDefinition")
+@Aggregate(snapshotTriggerDefinition = "experimentSnapshotTriggerDefinition")
 public class Classifier {
     private String id;
     @AggregateIdentifier

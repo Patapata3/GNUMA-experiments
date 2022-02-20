@@ -15,7 +15,7 @@ import org.unibayreuth.gnumaexperiments.events.experiments.DeletedExperimentEven
 
 import java.util.*;
 
-@Aggregate
+@Aggregate(snapshotTriggerDefinition = "experimentSnapshotTriggerDefinition")
 public class Experiment {
     @AggregateIdentifier
     private UUID id;
