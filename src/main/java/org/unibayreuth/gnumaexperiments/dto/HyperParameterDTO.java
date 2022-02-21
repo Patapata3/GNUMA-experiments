@@ -14,9 +14,9 @@ public class HyperParameterDTO {
     private String defaultValue;
     @SerializedName(value = "value_list", alternate = "valueList")
     private List<String> valueList;
-    @SerializedName(value="lower_bound")
+    @SerializedName(value="lower_bound", alternate = "min")
     private Double lowerBound;
-    @SerializedName(value="upper_bound")
+    @SerializedName(value="upper_bound", alternate = "max")
     private Double upperBound;
 
     public HyperParameterDTO(String key, HyperParameterType type, boolean optional, String defaultValue, List<String> valueList, Double lowerBound, Double upperBound) {
