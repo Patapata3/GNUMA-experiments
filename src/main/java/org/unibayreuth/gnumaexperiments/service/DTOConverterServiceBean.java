@@ -11,6 +11,11 @@ import java.util.stream.Collectors;
 
 @Service(DTOConverterService.NAME)
 public class DTOConverterServiceBean implements DTOConverterService {
+    /**
+     * Convert list of {@link HyperParameterDTO} objects into a list of {@link HyperParameter} objects
+     * @param hyperParameterDTOList - given list of dto objects
+     * @return - converted list
+     */
     @Override
     public List<HyperParameter> createHyperParametersFromDTO(List<HyperParameterDTO> hyperParameterDTOList) {
         return Objects.isNull(hyperParameterDTOList) ? new ArrayList<>() :

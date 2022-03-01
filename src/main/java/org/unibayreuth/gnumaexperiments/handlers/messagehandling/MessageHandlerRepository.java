@@ -24,6 +24,12 @@ public class MessageHandlerRepository {
                 .collect(Collectors.toMap(MessageHandler::getType, value -> value));
     }
 
+    /**
+     * Get a bean implementing {@link MessageHandler} for a given message type
+     * @param type - message type
+     * @return - bean for this message type
+     * @throws IllegalArgumentException - no bean was registered for a given type
+     */
     public MessageHandler getHandler(String type) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(type), "Event type cannot be empty");
         if (!handlerMap.containsKey(type)) {

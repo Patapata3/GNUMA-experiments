@@ -140,6 +140,12 @@ public class ExperimentCommandHandler {
         }
     }
 
+    /**
+     * Handling of a command to stop given classifiers within an experiment
+     * @param cmd - object containing id of the experiment and classifiers to be stopped
+     * @throws MissingEntityException - given experiment or classifier does not exist
+     * @throws ExperimentValidationException - all of the given classifiers are not in the training state
+     */
     @CommandHandler
     public void handle(StopExperimentCommand cmd) throws MissingEntityException, ExperimentValidationException {
         log(log::info, String.format("Received command to stop an experiment with id {%s}", cmd.getId()));
@@ -174,6 +180,12 @@ public class ExperimentCommandHandler {
         }
     }
 
+    /**
+     * Handling of a command to resume given classifiers within an experiment
+     * @param cmd - object containing id of the experiment and classifiers to be resumed
+     * @throws MissingEntityException - given experiment or classifier does not exist
+     * @throws ExperimentValidationException - all of the given classifiers are not in the training state
+     */
     @CommandHandler
     public void handle(ResumeExperimentCommand cmd) throws MissingEntityException, ExperimentValidationException {
         log(log::info, String.format("Received command to resume an experiment with id {%s}", cmd.getId()));

@@ -23,6 +23,10 @@ public class ClassifierInterruptHandler implements MessageHandler {
         return "ClassifierInterrupt";
     }
 
+    /**
+     * Handling the message saying that training on a classifier has been paused or stopped
+     * @param message - message from the classifier
+     */
     @Override
     public void handle(Message message) {
         String messageBody = new String(message.getBody());

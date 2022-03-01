@@ -72,6 +72,12 @@ public class RabbitConfiguration {
                 .build();
     }
 
+    /**
+     * Configure event snapshotting with a given threshold
+     * @param snapshotter - {@link Snapshotter} bean injected from the context
+     * @param threshold - event number threshold at which snapshotting is performed
+     * @return -
+     */
     @Bean
     public SnapshotTriggerDefinition experimentSnapshotTriggerDefinition(
             Snapshotter snapshotter,

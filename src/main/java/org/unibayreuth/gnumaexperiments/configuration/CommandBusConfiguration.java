@@ -8,6 +8,10 @@ import org.unibayreuth.gnumaexperiments.handlers.exceptionhandling.ExceptionWrap
 
 @Configuration
 public class CommandBusConfiguration {
+    /**
+     * Register a command bus with custom message interceptor for wrapping exceptions
+     * @return - {@link CommandBus} bean with a custom interceptor
+     */
     @Bean
     public CommandBus configureCommandBus() {
         CommandBus commandBus = SimpleCommandBus.builder().build();

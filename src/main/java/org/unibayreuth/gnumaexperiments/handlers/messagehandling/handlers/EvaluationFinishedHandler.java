@@ -49,6 +49,10 @@ public class EvaluationFinishedHandler implements MessageHandler {
         return TYPE;
     }
 
+    /**
+     * Handling of a message sent by the classifier at the end of the testing phase
+     * @param message - message from the classifier
+     */
     @Override
     public void handle(Message message) {
         String messageBody = new String(message.getBody());

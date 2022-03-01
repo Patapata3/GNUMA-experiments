@@ -15,6 +15,9 @@ import org.unibayreuth.gnumaexperiments.logging.GnumaLogger;
 
 import java.util.Map;
 
+/**
+ * Command interceptor class for wrapping and handling exceptions
+ */
 public class ExceptionWrappingHandlerInterceptor implements MessageHandlerInterceptor<CommandMessage<?>> {
     private final Logger log = LoggerFactory.getLogger(ExceptionWrappingHandlerInterceptor.class);
 
@@ -24,6 +27,13 @@ public class ExceptionWrappingHandlerInterceptor implements MessageHandlerInterc
             ServiceRequestException.class.getName(), ExperimentErrorCode.REQUEST_ERROR
     );
 
+    /**
+     * Wrap a command into an exception handler before it is passed for the execution
+     * @param unitOfWork
+     * @param interceptorChain
+     * @return
+     * @throws Exception
+     */
     @Override
     public Object handle(UnitOfWork<? extends CommandMessage<?>> unitOfWork, InterceptorChain interceptorChain) throws Exception {
         try {

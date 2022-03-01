@@ -25,6 +25,10 @@ public class ClassifierErrorHandler implements MessageHandler {
         return "ClassifierError";
     }
 
+    /**
+     * Handling of the message with an error occured in the classifier
+     * @param message - message from the classifier
+     */
     @Override
     public void handle(Message message) {
         String messageBody = new String(message.getBody());

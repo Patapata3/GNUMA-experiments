@@ -40,6 +40,10 @@ public class ClassifierStartHandler implements MessageHandler {
         return TYPE;
     }
 
+    /**
+     * Handling of a classifier startup message
+     * @param message - message from the classifier
+     */
     @Override
     public void handle(Message message) {
         String messageBody = new String(message.getBody());

@@ -28,6 +28,12 @@ public class ExperimentWorker {
     @Autowired
     private CommandGateway commandGateway;
 
+    /**
+     * Extract classifier from a given experiment by its address
+     * @param experiment - experiment
+     * @param address - address of the classifier being extracted
+     * @return - extracted classifier or null if it is not in the experiment
+     */
     @Nullable
     public ExperimentClassifier getClassifierByAddress(ExperimentView experiment, String address) {
         return experiment.getClassifiers()
@@ -37,6 +43,12 @@ public class ExperimentWorker {
                 .orElse(null);
     }
 
+    /**
+     * Set classifier experiment for given address and model id into given status
+     * @param address - address of the classifier within the system
+     * @param modelId - id of the trained model (provided by the classifier)
+     * @param newStatus - status the experiment should be put into
+     */
     public void updateExperimentStatus(String address, UUID modelId, ExperimentStatus newStatus) {
         log(log::debug, String.format("Looking for an experiment on a classifier at {%s} and model {%s}",
                 address, modelId));

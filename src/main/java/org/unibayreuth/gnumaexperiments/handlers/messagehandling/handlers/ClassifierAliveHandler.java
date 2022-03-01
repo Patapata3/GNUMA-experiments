@@ -31,6 +31,10 @@ public class ClassifierAliveHandler implements MessageHandler {
         return "ClassifierAlive";
     }
 
+    /**
+     * Handle the message communicating that certain classifier is still online
+     * @param message - message from the classifier
+     */
     @Override
     public void handle(Message message) {
         String messageBody = new String(message.getBody());

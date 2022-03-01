@@ -1,5 +1,10 @@
 package org.unibayreuth.gnumaexperiments.handlers.exceptionhandling;
 
+import org.axonframework.commandhandling.CommandExecutionException;
+
+/**
+ * Error object containing information on the exception before it was wrapped into {@link CommandExecutionException}
+ */
 public class ExperimentError {
     private final String name;
     private final String message;

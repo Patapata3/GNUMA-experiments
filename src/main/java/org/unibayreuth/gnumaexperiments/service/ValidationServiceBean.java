@@ -25,6 +25,12 @@ public class ValidationServiceBean implements ValidationService {
             HyperParameterType.DOUBLE, this::isDouble,
             HyperParameterType.INTEGER, this::isInteger);
 
+    /**
+     * Validate hyper parameter values using their configurations provided by the classifier
+     * @param hyperParameterValues - map of hyper parameter values
+     * @param hyperParameters - hyper parameter configurations
+     * @throws ExperimentValidationException - hyper parameter value is invalid
+     */
     @Override
     public void validateHyperParameters(Map<String, String> hyperParameterValues, List<HyperParameter> hyperParameters) throws ExperimentValidationException {
         log(log::info, "Started experiment parameter validation");

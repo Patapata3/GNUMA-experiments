@@ -56,6 +56,10 @@ public class TrainingUpdateHandler implements MessageHandler {
     @Value("${axon.amqp.exchange}")
     private String exchange;
 
+    /**
+     * Handling of a training update message from a classifier
+     * @param message - message from the classifier
+     */
     @Override
     public void handle(Message message) {
         String messageBody = new String(message.getBody());

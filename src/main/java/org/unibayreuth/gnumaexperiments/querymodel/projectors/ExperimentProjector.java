@@ -6,7 +6,6 @@ import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
-import org.unibayreuth.gnumaexperiments.dataModel.aggregate.Experiment;
 import org.unibayreuth.gnumaexperiments.dataModel.entity.ExperimentClassifier;
 import org.unibayreuth.gnumaexperiments.dataModel.enums.ExperimentStatus;
 import org.unibayreuth.gnumaexperiments.events.experiments.CreatedExperimentEvent;

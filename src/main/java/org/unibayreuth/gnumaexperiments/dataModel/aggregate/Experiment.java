@@ -25,8 +25,6 @@ public class Experiment {
     private List<ExperimentClassifier> classifiers;
     @AggregateMember
     private DataConfig data;
-    private UUID trainDatasetId;
-    private UUID testDatasetId;
 
     public Experiment() {}
 

@@ -38,6 +38,7 @@ public class RequestSenderServiceBean implements RequestSenderService {
      * @return - response from the resource
      * @throws IOException - malformed or incorrect uri
      * @throws InterruptedException - connection to the resource was interrupted
+     * @throws ServiceRequestException - resource returned non-ok response
      */
     @Override
     public HttpResponse<String> sendGetRequest(String uri, String... headers) throws IOException, InterruptedException, ServiceRequestException {
@@ -52,6 +53,16 @@ public class RequestSenderServiceBean implements RequestSenderService {
         return sendRequestFromBuilder(requestBuilder, headers);
     }
 
+    /**
+     * Send a post request
+     * @param uri - address of the resource request is sent to
+     * @param body - request body
+     * @param headers - request headers
+     * @return - response from the resource
+     * @throws IOException - malformed or incorrect uri
+     * @throws InterruptedException - connection to the resource was interrupted
+     * @throws ServiceRequestException - resource returned non-ok response
+     */
     @Override
     public HttpResponse<String> sendPostRequest(String uri, @Nullable String body, String... headers) throws IOException, InterruptedException, ServiceRequestException {
         log(log::info, String.format("Sending POST request to %s with headers:\n%s\n and body:\n%s", uri, Arrays.toString(headers), body));
@@ -65,6 +76,16 @@ public class RequestSenderServiceBean implements RequestSenderService {
         return sendRequestFromBuilder(requestBuilder, headers);
     }
 
+    /**
+     * Send put request
+     * @param uri - address of the resource request is sent to
+     * @param body - request body
+     * @param headers - request headers
+     * @return - response from the resource
+     * @throws IOException - malformed or incorrect uri
+     * @throws InterruptedException - connection to the resource was interrupted
+     * @throws ServiceRequestException - resource returned non-ok response
+     */
     @Override
     public HttpResponse<String> sendPutRequest(String uri, @Nullable String body, String... headers) throws InterruptedException, ServiceRequestException, IOException {
         log(log::info, String.format("Sending PUT request to %s with headers:\n%s\n and body:\n%s", uri, Arrays.toString(headers), body));
@@ -77,6 +98,15 @@ public class RequestSenderServiceBean implements RequestSenderService {
         return sendRequestFromBuilder(requestBuilder, headers);
     }
 
+    /**
+     * Send a delete request
+     * @param uri - address of a resource being requested
+     * @param headers - request headers
+     * @return - response from the resource
+     * @throws IOException - malformed or incorrect uri
+     * @throws InterruptedException - connection to the resource was interrupted
+     * @throws ServiceRequestException - resource returned non-ok response
+     */
     @Override
     public HttpResponse<String> sendDeleteRequest(String uri, String... headers) throws InterruptedException, ServiceRequestException, IOException {
         log(log::info, String.format("Sending DELETE request to %s with headers:\n%s\n", uri, Arrays.toString(headers)));
